@@ -878,8 +878,6 @@ function showPanel(id,btn){
 }
 
 // Init Supabase if keys exist
-window._sbUrl = localStorage.getItem('_sbUrl') || '';
-window._sbKey = localStorage.getItem('_sbKey') || '';
 if (initSupabase()) {
   syncAllFromCloud();
 }
@@ -996,8 +994,6 @@ function connectSupabase() {
   if (!url || !key) { alert('Enter both the URL and key'); return; }
   localStorage.setItem('_sbUrl', url);
   localStorage.setItem('_sbKey', key);
-  window._sbUrl = url;
-  window._sbKey = key;
   if (initSupabase()) {
     createTableIfNeeded().then(() => {
       syncAllFromCloud();
