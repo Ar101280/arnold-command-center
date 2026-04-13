@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>AR — Command Center</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -497,6 +498,17 @@ body{
       <span style="font-family:'Space Mono',monospace;font-size:10px;color:#5A5550;flex:1;text-align:right">Default template</span>
     </div>
 
+    <div style="background:#1E1E1E;border-radius:16px;padding:16px;margin-bottom:1rem" id="supabase-setup">
+      <div style="font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#69A2D7;margin-bottom:10px">☁ Cloud Storage</div>
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:#5A5550;margin-bottom:12px;line-height:1.6" id="cloud-status-msg">Not connected. Enter your Supabase keys to sync across all devices.</div>
+      <input id="sb-url-input" placeholder="Supabase Project URL" style="width:100%;background:#272727;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px 12px;font-family:'Space Mono',monospace;font-size:11px;color:#F0EDE8;margin-bottom:8px">
+      <input id="sb-key-input" placeholder="Supabase anon public key" style="width:100%;background:#272727;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px 12px;font-family:'Space Mono',monospace;font-size:11px;color:#F0EDE8;margin-bottom:10px">
+      <div style="display:flex;gap:8px">
+        <button onclick="connectSupabase()" style="padding:9px 18px;background:#69A2D7;color:#111;border:none;border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.08em">Connect</button>
+        <button onclick="syncAllFromCloud()" style="padding:9px 14px;background:none;color:#5A5550;border:1px solid rgba(255,255,255,0.14);border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em">Sync now</button>
+      </div>
+    </div>
+
     <div style="background:#1E1E1E;border-radius:16px;padding:16px;margin-bottom:1rem">
       <div style="font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#5A5570;margin-bottom:12px">Select day to edit</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap" id="day-selector">
@@ -865,6 +877,13 @@ function showPanel(id,btn){
   if(id==='settings')renderSettings();
 }
 
+// Init Supabase if keys exist
+window._sbUrl = localStorage.getItem('_sbUrl') || '';
+window._sbKey = localStorage.getItem('_sbKey') || '';
+if (initSupabase()) {
+  syncAllFromCloud();
+}
+
 renderToday();renderWeek();
 
 // SETTINGS — Base Schedule Editor
@@ -881,6 +900,7 @@ function getBaseSched() {
 
 function saveBaseSched(sched) {
   localStorage.setItem('ar_base_sched', JSON.stringify(sched));
+  if (sb) cloudSave('ar_base_sched', sched);
 }
 
 function selectDay(dow) {
@@ -946,6 +966,54 @@ function saveBaseSchedule() {
 
 function renderSettings() {
   selectDay(editingDay);
+  updateCloudStatusUI();
+}
+
+function updateCloudStatusUI() {
+  const msg = document.getElementById('cloud-status-msg');
+  const urlInp = document.getElementById('sb-url-input');
+  const keyInp = document.getElementById('sb-key-input');
+  if (!msg) return;
+  const savedUrl = localStorage.getItem('_sbUrl') || '';
+  const savedKey = localStorage.getItem('_sbKey') || '';
+  if (urlInp) urlInp.value = savedUrl;
+  if (keyInp) keyInp.value = savedKey;
+  if (sb) {
+    msg.style.color = '#4CAF82';
+    msg.textContent = '✓ Connected. Your data syncs across all devices automatically.';
+  } else if (savedUrl && savedKey) {
+    msg.style.color = '#DCCE73';
+    msg.textContent = 'Keys saved. Reconnecting...';
+  } else {
+    msg.style.color = '#5A5550';
+    msg.textContent = 'Not connected. Enter your Supabase keys to sync across all devices.';
+  }
+}
+
+function connectSupabase() {
+  const url = document.getElementById('sb-url-input').value.trim();
+  const key = document.getElementById('sb-key-input').value.trim();
+  if (!url || !key) { alert('Enter both the URL and key'); return; }
+  localStorage.setItem('_sbUrl', url);
+  localStorage.setItem('_sbKey', key);
+  window._sbUrl = url;
+  window._sbKey = key;
+  if (initSupabase()) {
+    createTableIfNeeded().then(() => {
+      syncAllFromCloud();
+      updateCloudStatusUI();
+    });
+  } else {
+    alert('Could not connect. Check your keys.');
+  }
+}
+
+async function createTableIfNeeded() {
+  if (!sb) return;
+  // Test connection by trying to read
+  try {
+    await sb.from('ar_data').select('uid').limit(1);
+  } catch(e) { console.log('Table may not exist yet'); }
 }
 
 // Override getTasks to use custom base sched if set
@@ -967,6 +1035,7 @@ function saveNote() {
   const notes = loadNotes();
   notes.unshift(note);
   localStorage.setItem('ar_notes_v1', JSON.stringify(notes));
+  if (sb) cloudSave('ar_notes_v1', notes);
   inp.value = '';
   renderNotes();
   save();
@@ -980,6 +1049,7 @@ function loadNotes() {
 function deleteNote(id) {
   const notes = loadNotes().filter(n => n.id !== id);
   localStorage.setItem('ar_notes_v1', JSON.stringify(notes));
+  if (sb) cloudSave('ar_notes_v1', notes);
   renderNotes();
 }
 
