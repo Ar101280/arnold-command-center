@@ -670,7 +670,10 @@ function load(){try{return JSON.parse(localStorage.getItem(SK))||def();}catch(e)
 function def(){return{statuses:{},overrides:{},streaks:{draw:[],devotional:[]},updated:new Date().toISOString()};}
 function save(){try{localStorage.setItem(SK,JSON.stringify(app));if(sb)cloudSave('ar_plan_v3',app);setSS('ok','Saved','sync-today');setTimeout(()=>setSS('','—','sync-today'),1500);}catch(e){setSS('er','Save failed','sync-today');}}
 
-let app=load(),weekOff=0;
+let app=load();
+const _today=new Date();_today.setHours(0,0,0,0);
+const _start=new Date(START);_start.setHours(0,0,0,0);
+let weekOff=Math.max(0,Math.floor((_today-_start)/86400000/7));
 window._ak=localStorage.getItem('_ark')||'';
 
 function dk(d){return d.toISOString().split('T')[0];}
