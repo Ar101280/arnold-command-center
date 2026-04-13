@@ -668,7 +668,7 @@ const BASE_SCHED={
 const SK='ar_plan_v3';
 function load(){try{return JSON.parse(localStorage.getItem(SK))||def();}catch(e){return def();}}
 function def(){return{statuses:{},overrides:{},streaks:{draw:[],devotional:[]},updated:new Date().toISOString()};}
-function save(){try{localStorage.setItem(SK,JSON.stringify(app));setSS('ok','Saved','sync-today');setTimeout(()=>setSS('','—','sync-today'),1500);}catch(e){setSS('er','Save failed','sync-today');}}
+function save(){try{localStorage.setItem(SK,JSON.stringify(app));if(sb)cloudSave('ar_plan_v3',app);setSS('ok','Saved','sync-today');setTimeout(()=>setSS('','—','sync-today'),1500);}catch(e){setSS('er','Save failed','sync-today');}}
 
 let app=load(),weekOff=0;
 window._ak=localStorage.getItem('_ark')||'';
@@ -875,6 +875,98 @@ function showPanel(id,btn){
   if(id==='ninety')render90();
   if(id==='notes')renderNotes();
   if(id==='settings')renderSettings();
+}
+
+
+// ── SUPABASE ──────────────────────────────────────────────────────────
+let sb = null;
+
+function initSupabase() {
+  const url = localStorage.getItem('_sbUrl') || '';
+  const key = localStorage.getItem('_sbKey') || '';
+  if (url && key && window.supabase) {
+    try { sb = window.supabase.createClient(url, key); return true; }
+    catch(e) { console.log('Supabase init error:', e); return false; }
+  }
+  return false;
+}
+
+function getUserId() {
+  let uid = localStorage.getItem('_ar_uid');
+  if (!uid) { uid = 'ar_' + Math.random().toString(36).slice(2,11); localStorage.setItem('_ar_uid', uid); }
+  return uid;
+}
+
+async function cloudSave(key, value) {
+  if (!sb) return false;
+  try {
+    const { error } = await sb.from('ar_data').upsert(
+      { uid: getUserId(), key: key, value: JSON.stringify(value), updated_at: new Date().toISOString() },
+      { onConflict: 'uid,key' }
+    );
+    if (error) console.log('cloudSave error:', error);
+    return !error;
+  } catch(e) { console.log('cloudSave exception:', e); return false; }
+}
+
+async function cloudLoad(key) {
+  if (!sb) return null;
+  try {
+    const { data, error } = await sb.from('ar_data').select('value').eq('uid', getUserId()).eq('key', key).single();
+    if (error || !data) return null;
+    return JSON.parse(data.value);
+  } catch(e) { return null; }
+}
+
+async function syncAllFromCloud() {
+  if (!sb) return;
+  setSS('go', 'Syncing...', 'sync-today');
+  try {
+    const [planData, notesData, schedData] = await Promise.all([
+      cloudLoad('ar_plan_v3'), cloudLoad('ar_notes_v1'), cloudLoad('ar_base_sched')
+    ]);
+    if (planData) { app = planData; localStorage.setItem('ar_plan_v3', JSON.stringify(app)); }
+    if (notesData) localStorage.setItem('ar_notes_v1', JSON.stringify(notesData));
+    if (schedData) localStorage.setItem('ar_base_sched', JSON.stringify(schedData));
+    setSS('ok', 'Synced ✓', 'sync-today');
+    setTimeout(() => setSS('', '—', 'sync-today'), 3000);
+    renderToday();
+  } catch(e) { setSS('er', 'Sync failed', 'sync-today'); }
+}
+
+function connectSupabase() {
+  const url = document.getElementById('sb-url-input').value.trim();
+  const key = document.getElementById('sb-key-input').value.trim();
+  if (!url || !key) { alert('Enter both the URL and key'); return; }
+  localStorage.setItem('_sbUrl', url);
+  localStorage.setItem('_sbKey', key);
+  if (initSupabase()) {
+    createTableIfNeeded().then(() => {
+      syncAllFromCloud();
+      updateCloudStatusUI();
+    });
+  } else {
+    alert('Could not connect. Check your keys and try again.');
+  }
+}
+
+async function createTableIfNeeded() {
+  if (!sb) return;
+  try { await sb.from('ar_data').select('uid').limit(1); }
+  catch(e) { console.log('Table check:', e); }
+}
+
+function updateCloudStatusUI() {
+  const msg = document.getElementById('cloud-status-msg');
+  const urlInp = document.getElementById('sb-url-input');
+  const keyInp = document.getElementById('sb-key-input');
+  const savedUrl = localStorage.getItem('_sbUrl') || '';
+  const savedKey = localStorage.getItem('_sbKey') || '';
+  if (urlInp) urlInp.value = savedUrl;
+  if (keyInp) keyInp.value = savedKey;
+  if (!msg) return;
+  if (sb) { msg.style.color='#4CAF82'; msg.textContent='✓ Connected. Data syncs across all devices.'; }
+  else { msg.style.color='#5A5550'; msg.textContent='Not connected. Enter your Supabase keys to sync across all devices.'; }
 }
 
 // Init Supabase if keys exist
