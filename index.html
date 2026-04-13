@@ -779,7 +779,8 @@ function renderDots(id,type,n,isPurple){
 // WEEK
 function renderWeek(){
   const dates=weekDates(weekOff);
-  document.getElementById('week-label').textContent=`WK ${weekOff+1} · ${fmtDate(dates[0])}–${fmtDate(dates[6])}`.toUpperCase();
+  const _planWeek = Math.floor((dates[0] - new Date(START)) / 86400000 / 7) + 1;
+  document.getElementById('week-label').textContent=`WK ${Math.max(1,_planWeek)} · ${fmtDate(dates[0])}–${fmtDate(dates[6])}`.toUpperCase();
   const today=new Date();today.setHours(0,0,0,0);
   const con=document.getElementById('week-days');con.innerHTML='';
   dates.forEach(date=>{
