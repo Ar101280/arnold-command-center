@@ -671,15 +671,23 @@ function def(){return{statuses:{},overrides:{},streaks:{draw:[],devotional:[]},u
 function save(){try{localStorage.setItem(SK,JSON.stringify(app));if(sb)cloudSave('ar_plan_v3',app);setSS('ok','Saved','sync-today');setTimeout(()=>setSS('','—','sync-today'),1500);}catch(e){setSS('er','Save failed','sync-today');}}
 
 let app=load();
-const _today=new Date();_today.setHours(0,0,0,0);
-const _start=new Date(START);_start.setHours(0,0,0,0);
-let weekOff=Math.max(0,Math.floor((_today-_start)/86400000/7));
+let weekOff=0;
 window._ak=localStorage.getItem('_ark')||'';
 
 function dk(d){return d.toISOString().split('T')[0];}
 function dayNum(date){const d=new Date(date);d.setHours(0,0,0,0);const s=new Date(START);s.setHours(0,0,0,0);return Math.floor((d-s)/86400000)+1;}
 function phase(n){return n<=30?1:n<=60?2:3;}
-function weekDates(off){const ds=[];const s=new Date(START);s.setDate(s.getDate()+off*7);for(let i=0;i<7;i++){const d=new Date(s);d.setDate(d.getDate()+i);ds.push(d);}return ds;}
+function weekDates(off){
+  const ds=[];
+  const today=new Date();today.setHours(0,0,0,0);
+  // Find most recent Monday
+  const dow=today.getDay();
+  const monday=new Date(today);
+  monday.setDate(today.getDate()-(dow===0?6:dow-1));
+  monday.setDate(monday.getDate()+off*7);
+  for(let i=0;i<7;i++){const d=new Date(monday);d.setDate(monday.getDate()+i);ds.push(d);}
+  return ds;
+}
 function fmtDate(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
 function getTasks(date){
   const wk=Math.floor(dayNum(date)/7);const ok='w'+wk;const d=dk(date);
