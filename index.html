@@ -817,37 +817,50 @@ function togTask(d,i){
 function changeWeek(dir){weekOff=Math.max(0,weekOff+dir);renderWeek();}
 
 // AI UPDATE
-async function aiCall(sys, msg, retries=3) {
-  for (let attempt = 0; attempt < retries; attempt++) {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': window._ak,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 3000,
-        system: sys,
-        messages: [{ role: 'user', content: msg }]
-      })
-    });
-    const data = await res.json();
-    if (data.error) {
-      const msg = data.error.message || '';
-      const isOverloaded = res.status === 529 || msg.toLowerCase().includes('overloaded');
-      if (isOverloaded && attempt < retries - 1) {
-        const wait = (attempt + 1) * 3000;
-        setSS('go', `Overloaded — retrying in ${(wait/1000)}s (${attempt+2}/${retries})...`, 'sync-week');
-        await new Promise(r => setTimeout(r, wait));
-        continue;
+async function aiCall(sys, msg) {
+  const models = ['claude-sonnet-4-20250514', 'claude-haiku-4-5-20251001'];
+  for (let m = 0; m < models.length; m++) {
+    const model = models[m];
+    const label = m === 0 ? 'Sonnet' : 'Haiku';
+    for (let attempt = 0; attempt < 2; attempt++) {
+      if (m > 0 || attempt > 0) {
+        setSS('go', `Trying ${label}${attempt > 0 ? ' retry' : ''}...`, 'sync-week');
       }
-      throw new Error(data.error.message);
+      try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': window._ak,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: model,
+            max_tokens: 3000,
+            system: sys,
+            messages: [{ role: 'user', content: msg }]
+          })
+        });
+        const data = await res.json();
+        if (data.error) {
+          const emsg = data.error.message || '';
+          const isOverloaded = res.status === 529 || emsg.toLowerCase().includes('overloaded');
+          if (isOverloaded) {
+            await new Promise(r => setTimeout(r, (attempt + 1) * 3000));
+            continue;
+          }
+          throw new Error(data.error.message);
+        }
+        return data;
+      } catch(e) {
+        if (e.message && !e.message.toLowerCase().includes('overloaded')) throw e;
+        await new Promise(r => setTimeout(r, 3000));
+      }
     }
-    return data;
+    if (m === 0) setSS('go', 'Sonnet busy — switching to Haiku...', 'sync-week');
   }
+  throw new Error('All models overloaded. Try again in a minute.');
 }
 
 async function applyUpdate(){
