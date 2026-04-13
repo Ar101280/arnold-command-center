@@ -817,6 +817,39 @@ function togTask(d,i){
 function changeWeek(dir){weekOff=Math.max(0,weekOff+dir);renderWeek();}
 
 // AI UPDATE
+async function aiCall(sys, msg, retries=3) {
+  for (let attempt = 0; attempt < retries; attempt++) {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': window._ak,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 3000,
+        system: sys,
+        messages: [{ role: 'user', content: msg }]
+      })
+    });
+    const data = await res.json();
+    if (data.error) {
+      const msg = data.error.message || '';
+      const isOverloaded = res.status === 529 || msg.toLowerCase().includes('overloaded');
+      if (isOverloaded && attempt < retries - 1) {
+        const wait = (attempt + 1) * 3000;
+        setSS('go', `Overloaded — retrying in ${(wait/1000)}s (${attempt+2}/${retries})...`, 'sync-week');
+        await new Promise(r => setTimeout(r, wait));
+        continue;
+      }
+      throw new Error(data.error.message);
+    }
+    return data;
+  }
+}
+
 async function applyUpdate(){
   const inp=document.getElementById('update-input');
   const upd=inp.value.trim();if(!upd)return;
@@ -830,9 +863,7 @@ async function applyUpdate(){
   const weekDateMap = dates.map(d=>DAYS_STR[d.getDay()]+' = '+d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})).join(', ');
   const sys='You are Arnold Randall planning assistant. Adjust his weekly schedule based on his update. Today is '+todayStr+'. This week exact dates: '+weekDateMap+'. CRITICAL: When Arnold mentions a specific date like April 3rd or next Friday, match it to the EXACT date in the week map above. Never put an event on the wrong date. Context: Artist/futurist. Scalogic AI agency (partner Kojo, just closed $8K deal). CS platform (50 free users, needs paid $87/$144). Goals: Scalogic $5-10K/mo, CS $5K MRR, book Q3, show Oct 10. Non-negotiables: devotional 6:30am, draw 30 min, reading with Brandie at night. School drop Mon/Wed/Thu 7:30am. Workout Mon/Wed/Fri 9am+Sat 7am. Church Wed 6-8pm. Brandie mtg Mon 11am-2pm. Priority: 1)Scalogic 2)CS 3)Art 4)Substack 5)Learning 6)Curriculum. Current week: '+summary+'. Return ONLY valid JSON no markdown: {"mon":[{"time":"...","cat":"...","desc":"..."}],"tue":[...],"wed":[...],"thu":[...],"fri":[...],"sat":[...],"sun":[...],"summary":"one sentence"}';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':window._ak,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,system:sys,messages:[{role:'user',content:upd}]})});
-    const data=await res.json();
-    if(data.error)throw new Error(data.error.message);
+    const data = await aiCall(sys, upd);
     const text=(data.content?.[0]?.text||'').replace(/```json|```/g,'').trim();
     const parsed=JSON.parse(text);
     const wk=Math.floor(dayNum(dates[0])/7);const ok='w'+wk;const ov={};
