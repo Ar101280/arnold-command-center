@@ -114,7 +114,7 @@ body{
 
 /* ── STATS ROW ──────────────────────────── */
 .stats-row{
-  display:grid;grid-template-columns:repeat(4,1fr);
+  display:grid;grid-template-columns:repeat(5,1fr);
   gap:6px;margin-bottom:1rem;
 }
 .stat-tile{
@@ -416,6 +416,7 @@ body{
       <div class="stat-tile"><div class="stat-n" id="s-phase">—</div><div class="stat-lbl">Phase</div></div>
       <div class="stat-tile"><div class="stat-n" id="s-draw" style="color:var(--yellow)">0</div><div class="stat-lbl">Draw</div></div>
       <div class="stat-tile"><div class="stat-n" id="s-dev" style="color:var(--purple)">0</div><div class="stat-lbl">Dev</div></div>
+      <div class="stat-tile"><div class="stat-n" id="s-claude" style="color:var(--green)">0</div><div class="stat-lbl">Claude</div></div>
     </div>
 
     <div class="sync-line" id="sync-today">—</div>
@@ -436,6 +437,14 @@ body{
         <div class="streak-title">Devotional</div>
         <div class="streak-sub">day streak</div>
         <div class="s-dots" id="dev-dots"></div>
+      </div>
+    </div>
+    <div style="margin-top:6px">
+      <div class="streak-card">
+        <div class="streak-num" id="claude-big" style="color:var(--green)">0</div>
+        <div class="streak-title">Claude Mastery</div>
+        <div class="streak-sub">day streak · 21 day challenge</div>
+        <div class="s-dots" id="claude-dots"></div>
       </div>
     </div>
   </div>
@@ -571,6 +580,7 @@ const CATS={
   'MONEY • CS':     {ic:'$',cls:'ic-amber'},
   'CURRICULUM':     {ic:'◎',cls:'ic-purple'},
   'LEARNING':       {ic:'◌',cls:'ic-blue'},
+  'CLAUDE MASTERY': {ic:'⚡',cls:'ic-green'},
   'SCALOGIC ADMIN': {ic:'○',cls:'ic-green'},
   'POST':           {ic:'▶',cls:'ic-yellow'},
   'FAMILY':         {ic:'♡',cls:'ic-amber'},
@@ -586,6 +596,7 @@ const CAT_COLOR={
   'ART LIFE+STYLE':'var(--green)','SUBSTACK':'var(--blue)',
   'MONEY • SCALOGIC':'var(--red)','MONEY • CS':'var(--amber)',
   'CURRICULUM':'var(--purple)','LEARNING':'var(--blue)',
+  'CLAUDE MASTERY':'var(--green)',
   'SCALOGIC ADMIN':'var(--green)','POST':'var(--yellow)',
   'FAMILY':'var(--amber)','ADMIN':'var(--muted)',
   'LEISURE':'var(--blue)','PERSONAL':'var(--purple)',
@@ -597,19 +608,21 @@ const BASE_SCHED={
     {time:'7:30am',cat:'FAMILY',desc:'School drop-off — back by 9am'},
     {time:'9:00am',cat:'WORKOUT',desc:'Workout 45–60 min'},
     {time:'9:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: outreach, follow-up, or proposal. Move one deal forward.'},
-    {time:'11:00am',cat:'FAMILY',desc:'Brandie mtg 11am–2pm: family, finances, LOWMERE'},
-    {time:'1:00pm',cat:'MONEY • CS',desc:'Curriculum Society: outreach or post. One action.'},
+    {time:'10:30am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
+    {time:'12:00pm',cat:'FAMILY',desc:'Brandie mtg 12–2pm: family, finances, LOWMERE'},
     {time:'2:00pm',cat:'ART • CREATE',desc:'Draw 30 min. Non-negotiable.'},
-    {time:'4:30pm',cat:'LEARNING',desc:'Claude Code / Figma / Cowork — 45 min'},
+    {time:'2:30pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
+    {time:'4:00pm',cat:'MONEY • CS',desc:'Curriculum Society: outreach or post. One action.'},
     {time:'5:00pm',cat:'ADMIN',desc:'Pipeline update + tomorrow prep (10 min)'},
-    {time:'9:00pm',cat:'LEISURE',desc:'Reading with Brandie (30–45 min)'},
   ],
   tue:[
     {time:'6:30am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
     {time:'9:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic: outreach or advance open proposal'},
-    {time:'10:30am',cat:'MONEY • CS',desc:'CS: personal outreach to free users or follow-up'},
+    {time:'10:30am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
+    {time:'12:00pm',cat:'MONEY • CS',desc:'CS: personal outreach to free users or follow-up'},
     {time:'1:00pm',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'2:00pm',cat:'SUBSTACK',desc:'Substack: long-form post or notes (1/week)'},
+    {time:'1:30pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
+    {time:'3:00pm',cat:'SUBSTACK',desc:'Substack: notes or draft (30 min max)'},
     {time:'4:30pm',cat:'SCALOGIC ADMIN',desc:'Scalogic admin — log contacts, update pipeline'},
     {time:'5:00pm',cat:'ADMIN',desc:'End of day review (10 min)'},
   ],
@@ -618,56 +631,61 @@ const BASE_SCHED={
     {time:'7:30am',cat:'FAMILY',desc:'School drop-off — back by 9am'},
     {time:'9:00am',cat:'WORKOUT',desc:'Workout 45–60 min'},
     {time:'9:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: follow-up calls or new outreach'},
+    {time:'10:30am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
     {time:'1:00pm',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'2:00pm',cat:'POST',desc:'Post @arnoldrandallart — 2 sentences, no announcement'},
+    {time:'1:30pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
+    {time:'3:00pm',cat:'POST',desc:'Post @arnoldrandallart — 2 sentences, no announcement'},
     {time:'4:30pm',cat:'SCALOGIC ADMIN',desc:'Scalogic admin (15 min)'},
     {time:'5:00pm',cat:'ADMIN',desc:'End of day (10 min)'},
     {time:'5:45pm',cat:'FAMILY',desc:'Church with daughter 6–8pm — evening clear'},
-    {time:'9:00pm',cat:'LEISURE',desc:'Reading with Brandie (30–45 min)'},
   ],
   thu:[
     {time:'6:30am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
     {time:'7:30am',cat:'FAMILY',desc:'School drop-off — back by 9am'},
     {time:'9:00am',cat:'CURRICULUM',desc:'Critical Fluency study — 30 min'},
-    {time:'10:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic: proposals, follow-ups, or research'},
+    {time:'10:00am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
+    {time:'11:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: proposals, follow-ups, or research'},
     {time:'1:00pm',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'1:30pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
     {time:'4:30pm',cat:'SCALOGIC ADMIN',desc:'Scalogic admin (15 min)'},
     {time:'5:00pm',cat:'ADMIN',desc:'End of day (10 min)'},
-    {time:'7:00pm',cat:'LEARNING',desc:'Skill learning: Claude Code / Figma / Cowork (1 hr)'},
   ],
   fri:[
     {time:'6:30am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
     {time:'9:00am',cat:'WORKOUT',desc:'Workout 45–60 min'},
     {time:'9:30am',cat:'MONEY • CS',desc:'CS: post @curriculumsociety or @arnoldrandallart'},
-    {time:'11:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic: new lead research + outreach'},
+    {time:'10:30am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
+    {time:'12:00pm',cat:'MONEY • SCALOGIC',desc:'Scalogic: new lead research + outreach'},
     {time:'1:00pm',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'2:00pm',cat:'SUBSTACK',desc:'Substack note or What I\'m Studying post'},
+    {time:'1:30pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
+    {time:'3:00pm',cat:'SUBSTACK',desc:'Substack note or What I\'m Studying (30 min max)'},
     {time:'4:30pm',cat:'SCALOGIC ADMIN',desc:'Scalogic admin (15 min)'},
     {time:'5:00pm',cat:'ADMIN',desc:'Week review: did money tasks happen?'},
-    {time:'9:00pm',cat:'LEISURE',desc:'Reading with Brandie (30–45 min)'},
   ],
   sat:[
     {time:'7:00am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
     {time:'7:30am',cat:'WORKOUT',desc:'Workout 45–60 min'},
     {time:'9:00am',cat:'CURRICULUM',desc:'Critical Fluency study — 30 min'},
-    {time:'10:00am',cat:'ART • CREATE',desc:'2-hour drawing session. Book or show piece.'},
-    {time:'1:00pm',cat:'POST',desc:'Post @arnoldrandallart — in-progress or finished piece'},
+    {time:'10:00am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
+    {time:'11:30am',cat:'ART • CREATE',desc:'2-hour drawing session. Book or show piece.'},
+    {time:'1:30pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
     {time:'3:00pm',cat:'MONEY • CS',desc:'CS: outreach batch or pricing post'},
     {time:'5:00pm',cat:'ADMIN',desc:'Plan next week (15 min)'},
   ],
   sun:[
     {time:'7:00am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
     {time:'9:00am',cat:'ART • CREATE',desc:'Draw 30 min. Free and easy.'},
-    {time:'10:00am',cat:'SUBSTACK',desc:'Substack: long-form Sunday post'},
-    {time:'2:00pm',cat:'CURRICULUM',desc:'Critical Fluency study — 30 min'},
+    {time:'10:00am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
+    {time:'11:30am',cat:'SUBSTACK',desc:'Substack: long-form Sunday post (45 min)'},
+    {time:'1:00pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
+    {time:'2:30pm',cat:'CURRICULUM',desc:'Critical Fluency study — 30 min'},
     {time:'4:00pm',cat:'MONEY • SCALOGIC',desc:'Light Scalogic prep: week\'s #1 close target?'},
-    {time:'9:00pm',cat:'LEISURE',desc:'Reading with Brandie (30–45 min)'},
   ],
 };
 
 const SK='ar_plan_v3';
 function load(){try{return JSON.parse(localStorage.getItem(SK))||def();}catch(e){return def();}}
-function def(){return{statuses:{},overrides:{},streaks:{draw:[],devotional:[]},updated:new Date().toISOString()};}
+function def(){return{statuses:{},overrides:{},streaks:{draw:[],devotional:[],claude:[]},updated:new Date().toISOString()};}
 function save(){try{localStorage.setItem(SK,JSON.stringify(app));if(sb)cloudSave('ar_plan_v3',app);setSS('ok','Saved','sync-today');setTimeout(()=>setSS('','—','sync-today'),1500);}catch(e){setSS('er','Save failed','sync-today');}}
 
 let app=load();
@@ -713,13 +731,16 @@ function renderToday(){
   const dn=dayNum(today);
   document.getElementById('s-day').textContent=Math.max(1,dn);
   document.getElementById('s-phase').textContent=phase(Math.max(1,dn));
-  const ds=calcStreak('draw'),dv=calcStreak('devotional');
+  const ds=calcStreak('draw'),dv=calcStreak('devotional'),cl=calcStreak('claude');
   document.getElementById('s-draw').textContent=ds;
   document.getElementById('s-dev').textContent=dv;
+  document.getElementById('s-claude').textContent=cl;
   document.getElementById('draw-big').textContent=ds;
   document.getElementById('dev-big').textContent=dv;
+  document.getElementById('claude-big').textContent=cl;
   renderDots('draw-dots','draw',14,false);
   renderDots('dev-dots','devotional',14,true);
+  renderDots('claude-dots','claude',21,false,'green');
 
   const h=today.getHours();
   const greet='Hello, AR.';
@@ -733,8 +754,8 @@ function renderToday(){
   const checkins=[
     {key:'devotional',name:'Devotional',sub:'6:30am · 15 min'},
     {key:'draw',name:'Drew today',sub:'30 min minimum'},
-    {key:'post',name:'Posted art',sub:'@arnoldrandallart'},
-    {key:'scalogic',name:'Scalogic task',sub:'outreach / proposal'},
+    {key:'money',name:'Money play',sub:'Scalogic / CS / any revenue move'},
+    {key:'claude',name:'Claude Mastery',sub:'3 hrs · morning + afternoon'},
   ];
   const con=document.getElementById('today-checkins');con.innerHTML='';
   checkins.forEach(c=>{
@@ -749,7 +770,7 @@ function renderToday(){
 function togCI(d,key){
   const sk=`${d}_ci_${key}`;const cur=app.statuses[sk]||'';
   app.statuses[sk]=cur===''?'C':cur==='C'?'NC':'';
-  if(key==='draw'||key==='devotional')updStreak(key,d,app.statuses[sk]==='C');
+  if(key==='draw'||key==='devotional'||key==='claude')updStreak(key,d,app.statuses[sk]==='C');
   save();renderToday();
 }
 function updStreak(type,d,done){
@@ -763,7 +784,7 @@ function calcStreak(type){
   let s=0,d=new Date(today);
   while(done.has(dk(d))){s++;d.setDate(d.getDate()-1);}return s;
 }
-function renderDots(id,type,n,isPurple){
+function renderDots(id,type,n,isPurple,colorName){
   const done=new Set(app.streaks[type]||[]);
   const el=document.getElementById(id);el.innerHTML='';
   const today=new Date();today.setHours(0,0,0,0);
@@ -771,7 +792,11 @@ function renderDots(id,type,n,isPurple){
     const d=new Date(today);d.setDate(d.getDate()-i);
     const dot=document.createElement('div');
     const on=done.has(dk(d));
-    dot.className='s-dot'+(on?(isPurple?' on purple':' on'):'')+(i===0?' now':'');
+    let cls='s-dot';
+    if(on){cls+=' on';if(isPurple)cls+=' purple';}
+    if(i===0)cls+=' now';
+    dot.className=cls;
+    if(on&&colorName==='green')dot.style.background='var(--green)';
     el.appendChild(dot);
   }
 }
@@ -1035,7 +1060,7 @@ renderToday();renderWeek();
 // SETTINGS — Base Schedule Editor
 let editingDay = 'mon';
 const DAY_LABELS = {mon:'Monday',tue:'Tuesday',wed:'Wednesday',thu:'Thursday',fri:'Friday',sat:'Saturday',sun:'Sunday'};
-const CAT_OPTIONS = ['DEVOTIONAL','WORKOUT','ART • CREATE','ART • POST','ART LIFE+STYLE','SUBSTACK','MONEY • SCALOGIC','MONEY • CS','CURRICULUM','LEARNING','SCALOGIC ADMIN','POST','FAMILY','ADMIN','LEISURE','PERSONAL'];
+const CAT_OPTIONS = ['DEVOTIONAL','WORKOUT','ART • CREATE','ART • POST','ART LIFE+STYLE','SUBSTACK','MONEY • SCALOGIC','MONEY • CS','CURRICULUM','LEARNING','CLAUDE MASTERY','SCALOGIC ADMIN','POST','FAMILY','ADMIN','LEISURE','PERSONAL'];
 
 function getBaseSched() {
   try {
