@@ -862,7 +862,7 @@ async function aiCall(sys, msg) {
           },
           body: JSON.stringify({
             model: model,
-            max_tokens: 3000,
+            max_tokens: 4096,
             system: sys,
             messages: [{ role: 'user', content: msg }]
           })
