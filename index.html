@@ -112,21 +112,20 @@ body{
 }
 .hero-sub strong{color:var(--bg);font-weight:700;}
 
-/* ── STATS ROW ──────────────────────────── */
-.stats-row{
-  display:grid;grid-template-columns:repeat(5,1fr);
-  gap:6px;margin-bottom:1rem;
-}
-.stat-tile{
-  background:var(--surface);
-  border-radius:12px;padding:12px 8px;text-align:center;
-}
-.stat-n{
+/* ── HERO LAYOUT ─────────────────────── */
+.hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.hero-meta{
   font-family:'Space Mono',monospace;
-  font-size:26px;font-weight:700;
-  color:var(--text);line-height:1;margin-bottom:4px;
+  font-size:11px;color:rgba(26,26,26,0.5);
+  letter-spacing:0.04em;margin-top:4px;
 }
-.stat-lbl{font-size:9px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;}
+.hero-ring-wrap{position:relative;width:48px;height:48px;}
+.hero-ring{width:48px;height:48px;}
+.hero-ring-text{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
+  color:var(--bg);
+}
 
 /* ── SECTION LABEL ──────────────────────── */
 .sec-lbl{
@@ -136,39 +135,41 @@ body{
   color:var(--muted);margin:1.25rem 0 0.75rem;
 }
 
-/* ── CHECKIN CARDS ──────────────────────── */
-.ci-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:0.5rem;}
-.ci-card{
-  background:var(--surface);border-radius:14px;
-  padding:14px;display:flex;flex-direction:column;gap:12px;
+/* ── CHECKIN LIST ─────────────────────── */
+.ci-list{display:flex;flex-direction:column;gap:4px;margin-bottom:0.5rem;}
+.ci-item{
+  background:var(--surface);border-radius:12px;
+  padding:12px 14px;display:flex;align-items:center;justify-content:space-between;
 }
+.ci-item-left{display:flex;flex-direction:column;gap:2px;}
 .ci-name{font-size:13px;font-weight:500;color:var(--text);line-height:1.3;}
 .ci-sub{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.04em;}
 .ci-btn{
-  align-self:flex-end;width:34px;height:34px;
+  width:32px;height:32px;
   border-radius:50%;border:1.5px solid var(--border2);
   background:var(--surface2);cursor:pointer;
   font-size:14px;display:flex;align-items:center;justify-content:center;
-  transition:all 0.12s;color:var(--muted);
+  transition:all 0.12s;color:var(--muted);flex-shrink:0;
 }
 .ci-btn.done{background:var(--text);border-color:var(--text);color:var(--bg);}
 .ci-btn.skip{background:var(--red-bg);border-color:var(--red);color:var(--red);}
 
-/* ── STREAK CARDS ───────────────────────── */
-.streak-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-.streak-card{background:var(--surface);border-radius:14px;padding:16px;}
-.streak-num{
-  font-family:'Space Mono',monospace;
-  font-size:58px;font-weight:700;
-  line-height:1;margin-bottom:2px;
+/* ── STREAK COMPACT ──────────────────── */
+.streak-compact{
+  background:var(--surface);border-radius:14px;padding:14px;
+  display:flex;flex-direction:column;gap:12px;
 }
-.streak-title{font-size:12px;font-weight:500;color:var(--text);margin-bottom:4px;}
-.streak-sub{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.04em;margin-bottom:10px;}
-.s-dots{display:flex;gap:3px;flex-wrap:wrap;}
+.streak-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.streak-label{font-size:12px;font-weight:500;min-width:100px;}
+.streak-count{
+  font-family:'Space Mono',monospace;font-size:16px;font-weight:700;
+  min-width:28px;text-align:right;
+}
+.s-dots{display:flex;gap:3px;flex-wrap:wrap;flex:1;}
 .s-dot{width:6px;height:6px;border-radius:50%;background:var(--surface3);}
 .s-dot.on{background:var(--yellow);}
 .s-dot.on.purple{background:var(--purple);}
-.s-dot.now{background:var(--text);}
+.s-dot.now{box-shadow:0 0 0 1.5px var(--muted);}
 
 /* ── SYNC ───────────────────────────────── */
 .sync-line{
@@ -378,20 +379,18 @@ body{
   .wn-label { font-size: 16px; }
   .hero-greeting { font-size: 42px; }
   .hero-sub { font-size: 16px; }
-  .stat-n { font-size: 32px; }
-  .stat-lbl { font-size: 12px; }
+  .hero-meta { font-size: 13px; }
   .sec-lbl { font-size: 14px; }
-  .ci-name { font-size: 18px; }
-  .ci-sub { font-size: 12px; }
+  .ci-name { font-size: 16px; }
+  .ci-sub { font-size: 11px; }
+  .streak-label { font-size: 14px; }
+  .streak-count { font-size: 20px; }
   .day-name { font-size: clamp(40px, 5vw, 72px); }
   .day-pill { font-size: 13px; padding: 5px 14px; }
   .day-cnt { font-size: 13px; }
   .tc-cat { font-size: 13px; }
   .tc-desc { font-size: 15px; }
   .tc-time { font-size: 12px; }
-  .streak-num { font-size: 72px; }
-  .streak-title { font-size: 16px; }
-  .streak-sub { font-size: 12px; }
   .update-label { font-size: 12px; }
   .ninety-hero-title { font-size: 18px; }
   .ninety-big { font-size: 72px; }
@@ -407,46 +406,46 @@ body{
   <!-- TODAY -->
   <div class="panel active" id="panel-today">
     <div class="hero" id="hero-card">
-      <div class="hero-greeting" id="hero-greeting">Hello, AR.</div>
-      <div class="hero-sub" id="hero-sub"><strong>0</strong> of <strong>0</strong> tasks done today</div>
+      <div class="hero-top">
+        <div>
+          <div class="hero-greeting" id="hero-greeting">Hello, AR.</div>
+          <div class="hero-meta" id="hero-meta">Day 1 · Foundation</div>
+        </div>
+        <div class="hero-ring-wrap">
+          <svg class="hero-ring" viewBox="0 0 48 48">
+            <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(26,26,26,0.15)" stroke-width="4"/>
+            <circle id="ring-progress" cx="24" cy="24" r="20" fill="none" stroke="var(--bg)" stroke-width="4" stroke-linecap="round" stroke-dasharray="125.66" stroke-dashoffset="125.66" transform="rotate(-90 24 24)"/>
+          </svg>
+          <div class="hero-ring-text" id="hero-ring-text">0%</div>
+        </div>
+      </div>
+      <div class="hero-sub" id="hero-sub"><strong>0</strong> of <strong>0</strong> tasks done</div>
     </div>
-
-    <div class="stats-row">
-      <div class="stat-tile"><div class="stat-n" id="s-day">—</div><div class="stat-lbl">Day</div></div>
-      <div class="stat-tile"><div class="stat-n" id="s-phase">—</div><div class="stat-lbl">Phase</div></div>
-      <div class="stat-tile"><div class="stat-n" id="s-draw" style="color:var(--yellow)">0</div><div class="stat-lbl">Draw</div></div>
-      <div class="stat-tile"><div class="stat-n" id="s-dev" style="color:var(--purple)">0</div><div class="stat-lbl">Dev</div></div>
-      <div class="stat-tile"><div class="stat-n" id="s-claude" style="color:var(--green)">0</div><div class="stat-lbl">Claude</div></div>
-    </div>
-
-    <div class="sync-line" id="sync-today">—</div>
 
     <div class="sec-lbl">Check in</div>
-    <div class="ci-grid" id="today-checkins"></div>
+    <div class="ci-list" id="today-checkins"></div>
 
     <div class="sec-lbl">Streaks</div>
-    <div class="streak-row">
-      <div class="streak-card">
-        <div class="streak-num" id="draw-big" style="color:var(--yellow)">0</div>
-        <div class="streak-title">Drawing</div>
-        <div class="streak-sub">day streak</div>
+    <div class="streak-compact">
+      <div class="streak-line">
+        <span class="streak-label" style="color:var(--yellow)">Drawing</span>
+        <span class="streak-count" id="draw-big" style="color:var(--yellow)">0</span>
         <div class="s-dots" id="draw-dots"></div>
       </div>
-      <div class="streak-card">
-        <div class="streak-num" id="dev-big" style="color:var(--purple)">0</div>
-        <div class="streak-title">Devotional</div>
-        <div class="streak-sub">day streak</div>
+      <div class="streak-line">
+        <span class="streak-label" style="color:var(--purple)">Devotional</span>
+        <span class="streak-count" id="dev-big" style="color:var(--purple)">0</span>
         <div class="s-dots" id="dev-dots"></div>
       </div>
-    </div>
-    <div style="margin-top:6px">
-      <div class="streak-card">
-        <div class="streak-num" id="claude-big" style="color:var(--green)">0</div>
-        <div class="streak-title">Claude Mastery</div>
-        <div class="streak-sub">day streak · 21 day challenge</div>
+      <div class="streak-line">
+        <span class="streak-label" style="color:var(--green)">Claude Mastery</span>
+        <span class="streak-count" id="claude-big" style="color:var(--green)">0</span>
         <div class="s-dots" id="claude-dots"></div>
       </div>
     </div>
+
+    <div class="sec-lbl">Today's tasks</div>
+    <div id="today-tasks"></div>
   </div>
 
   <!-- WEEK -->
@@ -604,82 +603,80 @@ const CAT_COLOR={
 
 const BASE_SCHED={
   mon:[
-    {time:'6:30am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'7:30am',cat:'FAMILY',desc:'School drop-off — back by 9am'},
-    {time:'9:00am',cat:'WORKOUT',desc:'Workout 45–60 min'},
-    {time:'9:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: outreach, follow-up, or proposal. Move one deal forward.'},
-    {time:'10:30am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
-    {time:'12:00pm',cat:'FAMILY',desc:'Brandie mtg 12–2pm: family, finances, LOWMERE'},
-    {time:'2:00pm',cat:'ART • CREATE',desc:'Draw 30 min. Non-negotiable.'},
-    {time:'2:30pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
-    {time:'4:00pm',cat:'MONEY • CS',desc:'Curriculum Society: outreach or post. One action.'},
-    {time:'5:00pm',cat:'ADMIN',desc:'Pipeline update + tomorrow prep (10 min)'},
+    {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
+    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'8:45am',cat:'WORKOUT',desc:'Workout 45–60 min'},
+    {time:'9:45am',cat:'MONEY • SCALOGIC',desc:'Scalogic: outreach, follow-up, or advance proposal'},
+    {time:'11:00am',cat:'MONEY • CS',desc:'CS: IG text banner + ambassador outreach'},
+    {time:'11:30am',cat:'POST',desc:'IG content — Art / Scalogic / ALS (batch or create)'},
+    {time:'12:30pm',cat:'MONEY • SCALOGIC',desc:'Scalogic: second push — proposals, research, follow-up'},
+    {time:'3:30pm',cat:'LEISURE',desc:'Leisure reading'},
+    {time:'5:00pm',cat:'ADMIN',desc:'Admin — end of day review (10 min)'},
   ],
   tue:[
-    {time:'6:30am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'9:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic: outreach or advance open proposal'},
-    {time:'10:30am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
-    {time:'12:00pm',cat:'MONEY • CS',desc:'CS: personal outreach to free users or follow-up'},
-    {time:'1:00pm',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'1:30pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
-    {time:'3:00pm',cat:'SUBSTACK',desc:'Substack: notes or draft (30 min max)'},
-    {time:'4:30pm',cat:'SCALOGIC ADMIN',desc:'Scalogic admin — log contacts, update pipeline'},
-    {time:'5:00pm',cat:'ADMIN',desc:'End of day review (10 min)'},
+    {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
+    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'7:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic: outreach — early start, extra time'},
+    {time:'8:30am',cat:'CLAUDE MASTERY',desc:'Claude Mastery (1.5 hrs)'},
+    {time:'10:00am',cat:'MONEY • CS',desc:'CS: IG text banner + ambassador outreach'},
+    {time:'10:30am',cat:'POST',desc:'IG content — Art / Scalogic / ALS'},
+    {time:'11:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: second push'},
+    {time:'1:00pm',cat:'LEISURE',desc:'Leisure reading'},
+    {time:'5:00pm',cat:'ADMIN',desc:'Admin — end of day review (10 min)'},
   ],
   wed:[
-    {time:'6:30am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'7:30am',cat:'FAMILY',desc:'School drop-off — back by 9am'},
-    {time:'9:00am',cat:'WORKOUT',desc:'Workout 45–60 min'},
-    {time:'9:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: follow-up calls or new outreach'},
-    {time:'10:30am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
-    {time:'1:00pm',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'1:30pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
-    {time:'3:00pm',cat:'POST',desc:'Post @arnoldrandallart — 2 sentences, no announcement'},
-    {time:'4:30pm',cat:'SCALOGIC ADMIN',desc:'Scalogic admin (15 min)'},
-    {time:'5:00pm',cat:'ADMIN',desc:'End of day (10 min)'},
-    {time:'5:45pm',cat:'FAMILY',desc:'Church with daughter 6–8pm — evening clear'},
+    {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
+    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'8:45am',cat:'WORKOUT',desc:'Workout 45–60 min'},
+    {time:'9:45am',cat:'MONEY • SCALOGIC',desc:'Scalogic: follow-up calls or new outreach'},
+    {time:'11:00am',cat:'MONEY • CS',desc:'CS: IG text banner + ambassador outreach'},
+    {time:'11:30am',cat:'POST',desc:'IG content — Art / Scalogic / ALS'},
+    {time:'12:30pm',cat:'MONEY • SCALOGIC',desc:'Scalogic: second push'},
+    {time:'3:30pm',cat:'LEISURE',desc:'Leisure reading'},
+    {time:'5:00pm',cat:'ADMIN',desc:'Admin — end of day review (10 min)'},
   ],
   thu:[
-    {time:'6:30am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'7:30am',cat:'FAMILY',desc:'School drop-off — back by 9am'},
-    {time:'9:00am',cat:'CURRICULUM',desc:'Critical Fluency study — 30 min'},
-    {time:'10:00am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
-    {time:'11:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: proposals, follow-ups, or research'},
-    {time:'1:00pm',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'1:30pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
-    {time:'4:30pm',cat:'SCALOGIC ADMIN',desc:'Scalogic admin (15 min)'},
-    {time:'5:00pm',cat:'ADMIN',desc:'End of day (10 min)'},
+    {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
+    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'8:45am',cat:'MONEY • SCALOGIC',desc:'Scalogic: outreach'},
+    {time:'10:00am',cat:'CLAUDE MASTERY',desc:'Claude Mastery (1.5 hrs)'},
+    {time:'11:30am',cat:'MONEY • CS',desc:'CS: IG text banner + outreach'},
+    {time:'12:00pm',cat:'POST',desc:'IG content — Art / Scalogic / ALS'},
+    {time:'1:00pm',cat:'MONEY • SCALOGIC',desc:'Scalogic: second push'},
+    {time:'3:30pm',cat:'LEISURE',desc:'Leisure reading'},
+    {time:'5:00pm',cat:'ADMIN',desc:'Admin — end of day review (10 min)'},
   ],
   fri:[
-    {time:'6:30am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'9:00am',cat:'WORKOUT',desc:'Workout 45–60 min'},
-    {time:'9:30am',cat:'MONEY • CS',desc:'CS: post @curriculumsociety or @arnoldrandallart'},
-    {time:'10:30am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
-    {time:'12:00pm',cat:'MONEY • SCALOGIC',desc:'Scalogic: new lead research + outreach'},
-    {time:'1:00pm',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'1:30pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
-    {time:'3:00pm',cat:'SUBSTACK',desc:'Substack note or What I\'m Studying (30 min max)'},
-    {time:'4:30pm',cat:'SCALOGIC ADMIN',desc:'Scalogic admin (15 min)'},
-    {time:'5:00pm',cat:'ADMIN',desc:'Week review: did money tasks happen?'},
+    {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
+    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'7:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic: outreach — early start'},
+    {time:'8:00am',cat:'WORKOUT',desc:'Workout 45–60 min'},
+    {time:'9:00am',cat:'MONEY • CS',desc:'CS: IG text banner + Substack note or article'},
+    {time:'10:00am',cat:'POST',desc:'IG content batch'},
+    {time:'11:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic: second push'},
+    {time:'1:00pm',cat:'LEISURE',desc:'Leisure reading'},
+    {time:'5:00pm',cat:'ADMIN',desc:'Admin + week review: did money tasks happen?'},
   ],
   sat:[
-    {time:'7:00am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'7:30am',cat:'WORKOUT',desc:'Workout 45–60 min'},
-    {time:'9:00am',cat:'CURRICULUM',desc:'Critical Fluency study — 30 min'},
-    {time:'10:00am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
-    {time:'11:30am',cat:'ART • CREATE',desc:'2-hour drawing session. Book or show piece.'},
-    {time:'1:30pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
-    {time:'3:00pm',cat:'MONEY • CS',desc:'CS: outreach batch or pricing post'},
-    {time:'5:00pm',cat:'ADMIN',desc:'Plan next week (15 min)'},
+    {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
+    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'7:00am',cat:'WORKOUT',desc:'Workout 45–60 min'},
+    {time:'8:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic outreach'},
+    {time:'9:00am',cat:'ART • CREATE',desc:'Art: extended session (1–2 hrs)'},
+    {time:'10:30am',cat:'CLAUDE MASTERY',desc:'Claude Mastery (1.5 hrs)'},
+    {time:'12:00pm',cat:'MONEY • CS',desc:'CS: Reddit post (monthly) or ambassador outreach'},
+    {time:'1:00pm',cat:'POST',desc:'IG content batch for next week'},
+    {time:'2:00pm',cat:'LEISURE',desc:'Leisure reading'},
+    {time:'5:00pm',cat:'ADMIN',desc:'Admin: plan next week (15 min)'},
   ],
   sun:[
-    {time:'7:00am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'9:00am',cat:'ART • CREATE',desc:'Draw 30 min. Free and easy.'},
-    {time:'10:00am',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (morning block)'},
-    {time:'11:30am',cat:'SUBSTACK',desc:'Substack: long-form Sunday post (45 min)'},
-    {time:'1:00pm',cat:'CLAUDE MASTERY',desc:'Claude Mastery — 1.5 hrs (afternoon block)'},
-    {time:'2:30pm',cat:'CURRICULUM',desc:'Critical Fluency study — 30 min'},
-    {time:'4:00pm',cat:'MONEY • SCALOGIC',desc:'Light Scalogic prep: week\'s #1 close target?'},
+    {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
+    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'7:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic: light prep — week\'s #1 target'},
+    {time:'8:00am',cat:'CLAUDE MASTERY',desc:'Claude Mastery (1.5 hrs)'},
+    {time:'9:30am',cat:'SUBSTACK',desc:'CS: Substack note or article'},
+    {time:'11:00am',cat:'LEISURE',desc:'Leisure reading'},
+    {time:'5:00pm',cat:'ADMIN',desc:'Admin — end of day review (10 min)'},
   ],
 };
 
@@ -729,12 +726,10 @@ function showKeySetup(){
 function renderToday(){
   const today=new Date();today.setHours(0,0,0,0);
   const dn=dayNum(today);
-  document.getElementById('s-day').textContent=Math.max(1,dn);
-  document.getElementById('s-phase').textContent=phase(Math.max(1,dn));
+  const dayN=Math.max(1,dn);
+  document.getElementById('hero-meta').textContent=`Day ${dayN} · ${phase(dayN)}`;
+
   const ds=calcStreak('draw'),dv=calcStreak('devotional'),cl=calcStreak('claude');
-  document.getElementById('s-draw').textContent=ds;
-  document.getElementById('s-dev').textContent=dv;
-  document.getElementById('s-claude').textContent=cl;
   document.getElementById('draw-big').textContent=ds;
   document.getElementById('dev-big').textContent=dv;
   document.getElementById('claude-big').textContent=cl;
@@ -742,28 +737,42 @@ function renderToday(){
   renderDots('dev-dots','devotional',14,true);
   renderDots('claude-dots','claude',21,false,'green');
 
-  const h=today.getHours();
-  const greet='Hello, AR.';
-  document.getElementById('hero-greeting').textContent=greet;
-
   const tasks=getTasks(today);
   const done=tasks.filter((_,i)=>app.statuses[`${dk(today)}_${i}`]==='C').length;
-  document.getElementById('hero-sub').innerHTML=`<strong>${done}</strong> of <strong>${tasks.length}</strong> tasks done today`;
+  const pct=tasks.length?Math.round(done/tasks.length*100):0;
+  document.getElementById('hero-sub').innerHTML=`<strong>${done}</strong> of <strong>${tasks.length}</strong> tasks done`;
+
+  // Progress ring
+  const circ=125.66;
+  const offset=circ-(pct/100*circ);
+  document.getElementById('ring-progress').setAttribute('stroke-dashoffset',offset);
+  document.getElementById('hero-ring-text').textContent=`${pct}%`;
 
   const d=dk(today);
   const checkins=[
-    {key:'devotional',name:'Devotional',sub:'6:30am · 15 min'},
+    {key:'devotional',name:'Devotional',sub:'6:15am · 15 min'},
     {key:'draw',name:'Drew today',sub:'30 min minimum'},
     {key:'money',name:'Money play',sub:'Scalogic / CS / any revenue move'},
-    {key:'claude',name:'Claude Mastery',sub:'3 hrs · morning + afternoon'},
+    {key:'claude',name:'Claude Mastery',sub:'1.5 hrs · 4 days/week'},
   ];
   const con=document.getElementById('today-checkins');con.innerHTML='';
   checkins.forEach(c=>{
     const sk=`${d}_ci_${c.key}`;
     const st=app.statuses[sk]||'';
-    const card=document.createElement('div');card.className='ci-card';
-    card.innerHTML=`<div><div class="ci-name">${c.name}</div><div class="ci-sub">${c.sub}</div></div><button class="ci-btn ${st==='C'?'done':st==='NC'?'skip':''}" onclick="togCI('${d}','${c.key}')">${st==='C'?'✓':st==='NC'?'×':'○'}</button>`;
-    con.appendChild(card);
+    const item=document.createElement('div');item.className='ci-item';
+    item.innerHTML=`<div class="ci-item-left"><div class="ci-name">${c.name}</div><div class="ci-sub">${c.sub}</div></div><button class="ci-btn ${st==='C'?'done':st==='NC'?'skip':''}" onclick="togCI('${d}','${c.key}')">${st==='C'?'✓':st==='NC'?'×':'○'}</button>`;
+    con.appendChild(item);
+  });
+
+  // Today's tasks
+  const tcon=document.getElementById('today-tasks');tcon.innerHTML='';
+  tasks.forEach((task,i)=>{
+    const sk=`${d}_${i}`;const st=app.statuses[sk]||'';
+    const cat=CATS[task.cat]||{ic:'·',cls:'ic-gray'};
+    const catColor=CAT_COLOR[task.cat]||'var(--muted)';
+    const card=document.createElement('div');card.className='task-card';
+    card.innerHTML=`<div class="tc-icon ${cat.cls}">${cat.ic}</div><div class="tc-body"><div class="tc-cat" style="color:${catColor}">${task.cat}</div><div class="tc-desc">${task.desc}</div><div class="tc-time">${task.time}</div></div><button class="tc-status ${st==='C'?'done':st==='NC'?'nc':''}" onclick="togTodayTask('${d}',${i})">${st||'—'}</button>`;
+    tcon.appendChild(card);
   });
 }
 
@@ -772,6 +781,11 @@ function togCI(d,key){
   app.statuses[sk]=cur===''?'C':cur==='C'?'NC':'';
   if(key==='draw'||key==='devotional'||key==='claude')updStreak(key,d,app.statuses[sk]==='C');
   save();renderToday();
+}
+function togTodayTask(d,i){
+  const sk=`${d}_${i}`;const cur=app.statuses[sk]||'';
+  app.statuses[sk]=cur===''?'C':cur==='C'?'NC':'';
+  save();renderToday();renderWeek();
 }
 function updStreak(type,d,done){
   const arr=app.streaks[type]||[];const i=arr.indexOf(d);
@@ -899,7 +913,7 @@ async function applyUpdate(){
   const summary=dates.map(d=>{const tasks=getTasks(d);return `${DAY_NAMES[d.getDay()]} ${fmtDate(d)}: ${tasks.map(t=>t.cat+': '+t.desc).join(' | ')}`;}).join('\n');
   const todayStr = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
   const weekDateMap = dates.map(d=>DAYS_STR[d.getDay()]+' = '+d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})).join(', ');
-  const sys='You are Arnold Randall planning assistant. Adjust his weekly schedule based on his update. Today is '+todayStr+'. This week exact dates: '+weekDateMap+'. CRITICAL: When Arnold mentions a specific date like April 3rd or next Friday, match it to the EXACT date in the week map above. Never put an event on the wrong date. Context: Artist/futurist. Scalogic AI agency (partner Kojo, just closed $8K deal). CS platform (50 free users, needs paid $87/$144). Goals: Scalogic $5-10K/mo, CS $5K MRR, book Q3, show Oct 10. Non-negotiables: devotional 6:30am, draw 30 min, reading with Brandie at night. School drop Mon/Wed/Thu 7:30am. Workout Mon/Wed/Fri 9am+Sat 7am. Church Wed 6-8pm. Brandie mtg Mon 11am-2pm. Priority: 1)Scalogic 2)CS 3)Art 4)Substack 5)Learning 6)Curriculum. Current week: '+summary+'. Return ONLY valid JSON no markdown: {"mon":[{"time":"...","cat":"...","desc":"..."}],"tue":[...],"wed":[...],"thu":[...],"fri":[...],"sat":[...],"sun":[...],"summary":"one sentence"}';
+  const sys='You are Arnold Randall planning assistant. Adjust his weekly schedule based on his update. Today is '+todayStr+'. This week exact dates: '+weekDateMap+'. CRITICAL: When Arnold mentions a specific date like April 3rd or next Friday, match it to the EXACT date in the week map above. Never put an event on the wrong date. Context: Artist/futurist. Scalogic AI agency (partner Kojo). CS platform (88 free users). Goals: Scalogic 2-4 clients/mo, CS growth. Non-negotiables: devotional 6:15am, draw 6:30am daily, admin 5pm. Workout Mon/Wed/Fri 8:45am. M/W/Th blocked 7-8:45am (school drop) and 2-3:30pm (school pickup) until June 12. Claude Mastery 1.5hrs on Tue/Thu/Sat/Sun. IG posting: @arnoldrandallart 2-3x/wk, @scalogicai 2-3x/wk, @artlifeandstyle 3x/wk, @curriculumsociety daily text banner. Priority: 1)Scalogic 2)CS 3)Art 4)Substack. Current week: '+summary+'. Return ONLY valid JSON no markdown: {"mon":[{"time":"...","cat":"...","desc":"..."}],"tue":[...],"wed":[...],"thu":[...],"fri":[...],"sat":[...],"sun":[...],"summary":"one sentence"}';
   try{
     const data = await aiCall(sys, upd);
     const text=(data.content?.[0]?.text||'').replace(/```json|```/g,'').trim();
