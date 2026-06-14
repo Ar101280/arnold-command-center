@@ -160,7 +160,7 @@ body{
   display:flex;flex-direction:column;gap:12px;
 }
 .streak-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.streak-label{font-size:12px;font-weight:500;min-width:100px;}
+.streak-label{font-size:12px;font-weight:500;min-width:80px;}
 .streak-count{
   font-family:'Space Mono',monospace;font-size:16px;font-weight:700;
   min-width:28px;text-align:right;
@@ -438,9 +438,9 @@ body{
         <div class="s-dots" id="dev-dots"></div>
       </div>
       <div class="streak-line">
-        <span class="streak-label" style="color:var(--green)">Claude Mastery</span>
-        <span class="streak-count" id="claude-big" style="color:var(--green)">0</span>
-        <div class="s-dots" id="claude-dots"></div>
+        <span class="streak-label" style="color:var(--green)">Outreach</span>
+        <span class="streak-count" id="outreach-big" style="color:var(--green)">0</span>
+        <div class="s-dots" id="outreach-dots"></div>
       </div>
     </div>
 
@@ -579,7 +579,6 @@ const CATS={
   'MONEY • CS':     {ic:'$',cls:'ic-amber'},
   'CURRICULUM':     {ic:'◎',cls:'ic-purple'},
   'LEARNING':       {ic:'◌',cls:'ic-blue'},
-  'CLAUDE MASTERY': {ic:'⚡',cls:'ic-green'},
   'SCALOGIC ADMIN': {ic:'○',cls:'ic-green'},
   'POST':           {ic:'▶',cls:'ic-yellow'},
   'FAMILY':         {ic:'♡',cls:'ic-amber'},
@@ -595,7 +594,6 @@ const CAT_COLOR={
   'ART LIFE+STYLE':'var(--green)','SUBSTACK':'var(--blue)',
   'MONEY • SCALOGIC':'var(--red)','MONEY • CS':'var(--amber)',
   'CURRICULUM':'var(--purple)','LEARNING':'var(--blue)',
-  'CLAUDE MASTERY':'var(--green)',
   'SCALOGIC ADMIN':'var(--green)','POST':'var(--yellow)',
   'FAMILY':'var(--amber)','ADMIN':'var(--muted)',
   'LEISURE':'var(--blue)','PERSONAL':'var(--purple)',
@@ -604,85 +602,72 @@ const CAT_COLOR={
 const BASE_SCHED={
   mon:[
     {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'8:45am',cat:'WORKOUT',desc:'Workout 45–60 min'},
-    {time:'9:45am',cat:'MONEY • SCALOGIC',desc:'Scalogic: outreach, follow-up, or advance proposal'},
-    {time:'11:00am',cat:'MONEY • CS',desc:'CS: IG text banner + ambassador outreach'},
-    {time:'11:30am',cat:'POST',desc:'IG content — Art / Scalogic / ALS (batch or create)'},
-    {time:'12:30pm',cat:'MONEY • SCALOGIC',desc:'Scalogic: second push — proposals, research, follow-up'},
-    {time:'3:30pm',cat:'LEISURE',desc:'Leisure reading'},
+    {time:'6:30am',cat:'WORKOUT',desc:'Workout (30 min)'},
+    {time:'7:00am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'7:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: 5 web comps + 10 audits. Send all 15.'},
+    {time:'12:00pm',cat:'MONEY • CS',desc:'CS: 1 IG post + 3–5 YouTube influencer outreaches'},
+    {time:'1:30pm',cat:'PERSONAL',desc:'LinkedIn: 5 targeted applications (no Easy Apply)'},
     {time:'5:00pm',cat:'ADMIN',desc:'Admin — end of day review (10 min)'},
   ],
   tue:[
     {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'7:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic: outreach — early start, extra time'},
-    {time:'8:30am',cat:'CLAUDE MASTERY',desc:'Claude Mastery (1.5 hrs)'},
-    {time:'10:00am',cat:'MONEY • CS',desc:'CS: IG text banner + ambassador outreach'},
-    {time:'10:30am',cat:'POST',desc:'IG content — Art / Scalogic / ALS'},
-    {time:'11:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: second push'},
-    {time:'1:00pm',cat:'LEISURE',desc:'Leisure reading'},
+    {time:'6:30am',cat:'WORKOUT',desc:'Workout (30 min)'},
+    {time:'7:00am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'7:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: 5 web comps + 10 audits. Send all 15.'},
+    {time:'12:00pm',cat:'MONEY • CS',desc:'CS: 1 IG post + 3–5 YouTube influencer outreaches'},
+    {time:'1:30pm',cat:'PERSONAL',desc:'LinkedIn: 5 targeted applications (no Easy Apply)'},
     {time:'5:00pm',cat:'ADMIN',desc:'Admin — end of day review (10 min)'},
   ],
   wed:[
     {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'8:45am',cat:'WORKOUT',desc:'Workout 45–60 min'},
-    {time:'9:45am',cat:'MONEY • SCALOGIC',desc:'Scalogic: follow-up calls or new outreach'},
-    {time:'11:00am',cat:'MONEY • CS',desc:'CS: IG text banner + ambassador outreach'},
-    {time:'11:30am',cat:'POST',desc:'IG content — Art / Scalogic / ALS'},
-    {time:'12:30pm',cat:'MONEY • SCALOGIC',desc:'Scalogic: second push'},
-    {time:'3:30pm',cat:'LEISURE',desc:'Leisure reading'},
+    {time:'6:30am',cat:'WORKOUT',desc:'Workout (30 min)'},
+    {time:'7:00am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'7:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: 5 web comps + 10 audits. Send all 15.'},
+    {time:'12:00pm',cat:'MONEY • CS',desc:'CS: 1 IG post + 3–5 YouTube influencer outreaches'},
+    {time:'1:30pm',cat:'PERSONAL',desc:'LinkedIn: 5 targeted applications (no Easy Apply)'},
     {time:'5:00pm',cat:'ADMIN',desc:'Admin — end of day review (10 min)'},
   ],
   thu:[
     {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'8:45am',cat:'MONEY • SCALOGIC',desc:'Scalogic: outreach'},
-    {time:'10:00am',cat:'CLAUDE MASTERY',desc:'Claude Mastery (1.5 hrs)'},
-    {time:'11:30am',cat:'MONEY • CS',desc:'CS: IG text banner + outreach'},
-    {time:'12:00pm',cat:'POST',desc:'IG content — Art / Scalogic / ALS'},
-    {time:'1:00pm',cat:'MONEY • SCALOGIC',desc:'Scalogic: second push'},
-    {time:'3:30pm',cat:'LEISURE',desc:'Leisure reading'},
+    {time:'6:30am',cat:'WORKOUT',desc:'Workout (30 min)'},
+    {time:'7:00am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'7:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: 5 web comps + 10 audits. Send all 15.'},
+    {time:'12:00pm',cat:'MONEY • CS',desc:'CS: 1 IG post + 3–5 YouTube influencer outreaches'},
+    {time:'1:30pm',cat:'PERSONAL',desc:'LinkedIn: 5 targeted applications (no Easy Apply)'},
     {time:'5:00pm',cat:'ADMIN',desc:'Admin — end of day review (10 min)'},
   ],
   fri:[
     {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'7:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic: outreach — early start'},
-    {time:'8:00am',cat:'WORKOUT',desc:'Workout 45–60 min'},
-    {time:'9:00am',cat:'MONEY • CS',desc:'CS: IG text banner + Substack note or article'},
-    {time:'10:00am',cat:'POST',desc:'IG content batch'},
-    {time:'11:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic: second push'},
-    {time:'1:00pm',cat:'LEISURE',desc:'Leisure reading'},
-    {time:'5:00pm',cat:'ADMIN',desc:'Admin + week review: did money tasks happen?'},
+    {time:'6:30am',cat:'WORKOUT',desc:'Workout (30 min)'},
+    {time:'7:00am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'7:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: 5 web comps + 10 audits. Send all 15.'},
+    {time:'12:00pm',cat:'MONEY • CS',desc:'CS: 1 IG post + 3–5 YouTube influencer outreaches'},
+    {time:'1:30pm',cat:'PERSONAL',desc:'LinkedIn: 5 targeted applications (no Easy Apply)'},
+    {time:'5:00pm',cat:'ADMIN',desc:'Admin — week review: how many touches went out?'},
   ],
   sat:[
     {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'7:00am',cat:'WORKOUT',desc:'Workout 45–60 min'},
-    {time:'8:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic outreach'},
-    {time:'9:00am',cat:'ART • CREATE',desc:'Art: extended session (1–2 hrs)'},
-    {time:'10:30am',cat:'CLAUDE MASTERY',desc:'Claude Mastery (1.5 hrs)'},
-    {time:'12:00pm',cat:'MONEY • CS',desc:'CS: Reddit post (monthly) or ambassador outreach'},
-    {time:'1:00pm',cat:'POST',desc:'IG content batch for next week'},
-    {time:'2:00pm',cat:'LEISURE',desc:'Leisure reading'},
-    {time:'5:00pm',cat:'ADMIN',desc:'Admin: plan next week (15 min)'},
+    {time:'6:30am',cat:'WORKOUT',desc:'Workout (30 min)'},
+    {time:'7:00am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'7:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: 5 web comps + 10 audits. Send all 15.'},
+    {time:'12:00pm',cat:'MONEY • CS',desc:'CS: 1 IG post + 3–5 YouTube influencer outreaches'},
+    {time:'1:30pm',cat:'PERSONAL',desc:'LinkedIn: 5 targeted applications (no Easy Apply)'},
+    {time:'5:00pm',cat:'ADMIN',desc:'Admin — plan next week (10 min)'},
   ],
   sun:[
     {time:'6:15am',cat:'DEVOTIONAL',desc:'Devotional (15 min)'},
-    {time:'6:30am',cat:'ART • CREATE',desc:'Draw 30 min'},
-    {time:'7:00am',cat:'MONEY • SCALOGIC',desc:'Scalogic: light prep — week\'s #1 target'},
-    {time:'8:00am',cat:'CLAUDE MASTERY',desc:'Claude Mastery (1.5 hrs)'},
-    {time:'9:30am',cat:'SUBSTACK',desc:'CS: Substack note or article'},
-    {time:'11:00am',cat:'LEISURE',desc:'Leisure reading'},
+    {time:'6:30am',cat:'WORKOUT',desc:'Workout (30 min)'},
+    {time:'7:00am',cat:'ART • CREATE',desc:'Draw 30 min'},
+    {time:'7:30am',cat:'MONEY • SCALOGIC',desc:'Scalogic: 5 web comps + 10 audits. Send all 15.'},
+    {time:'12:00pm',cat:'MONEY • CS',desc:'CS: 1 IG post + 3–5 YouTube influencer outreaches'},
+    {time:'1:30pm',cat:'PERSONAL',desc:'LinkedIn: 5 targeted applications (no Easy Apply)'},
     {time:'5:00pm',cat:'ADMIN',desc:'Admin — end of day review (10 min)'},
   ],
 };
 
 const SK='ar_plan_v3';
 function load(){try{return JSON.parse(localStorage.getItem(SK))||def();}catch(e){return def();}}
-function def(){return{statuses:{},overrides:{},streaks:{draw:[],devotional:[],claude:[]},updated:new Date().toISOString()};}
+function def(){return{statuses:{},overrides:{},streaks:{draw:[],devotional:[],outreach:[]},updated:new Date().toISOString()};}
 function save(){try{localStorage.setItem(SK,JSON.stringify(app));if(sb)cloudSave('ar_plan_v3',app);setSS('ok','Saved','sync-today');setTimeout(()=>setSS('','—','sync-today'),1500);}catch(e){setSS('er','Save failed','sync-today');}}
 
 let app=load();
@@ -729,20 +714,19 @@ function renderToday(){
   const dayN=Math.max(1,dn);
   document.getElementById('hero-meta').textContent=`Day ${dayN} · ${phase(dayN)}`;
 
-  const ds=calcStreak('draw'),dv=calcStreak('devotional'),cl=calcStreak('claude');
+  const ds=calcStreak('draw'),dv=calcStreak('devotional'),os=calcStreak('outreach');
   document.getElementById('draw-big').textContent=ds;
   document.getElementById('dev-big').textContent=dv;
-  document.getElementById('claude-big').textContent=cl;
-  renderDots('draw-dots','draw',14,false);
-  renderDots('dev-dots','devotional',14,true);
-  renderDots('claude-dots','claude',21,false,'green');
+  document.getElementById('outreach-big').textContent=os;
+  renderDots('draw-dots','draw',16,false);
+  renderDots('dev-dots','devotional',16,true);
+  renderDots('outreach-dots','outreach',16,false,'green');
 
   const tasks=getTasks(today);
   const done=tasks.filter((_,i)=>app.statuses[`${dk(today)}_${i}`]==='C').length;
   const pct=tasks.length?Math.round(done/tasks.length*100):0;
   document.getElementById('hero-sub').innerHTML=`<strong>${done}</strong> of <strong>${tasks.length}</strong> tasks done`;
 
-  // Progress ring
   const circ=125.66;
   const offset=circ-(pct/100*circ);
   document.getElementById('ring-progress').setAttribute('stroke-dashoffset',offset);
@@ -752,8 +736,8 @@ function renderToday(){
   const checkins=[
     {key:'devotional',name:'Devotional',sub:'6:15am · 15 min'},
     {key:'draw',name:'Drew today',sub:'30 min minimum'},
-    {key:'money',name:'Money play',sub:'Scalogic / CS / any revenue move'},
-    {key:'claude',name:'Claude Mastery',sub:'1.5 hrs · 4 days/week'},
+    {key:'outreach',name:'Outreach done',sub:'Scalogic audits + comps sent'},
+    {key:'cs',name:'CS outreach',sub:'IG post + influencer DMs'},
   ];
   const con=document.getElementById('today-checkins');con.innerHTML='';
   checkins.forEach(c=>{
@@ -764,7 +748,6 @@ function renderToday(){
     con.appendChild(item);
   });
 
-  // Today's tasks
   const tcon=document.getElementById('today-tasks');tcon.innerHTML='';
   tasks.forEach((task,i)=>{
     const sk=`${d}_${i}`;const st=app.statuses[sk]||'';
@@ -776,16 +759,17 @@ function renderToday(){
   });
 }
 
-function togCI(d,key){
-  const sk=`${d}_ci_${key}`;const cur=app.statuses[sk]||'';
-  app.statuses[sk]=cur===''?'C':cur==='C'?'NC':'';
-  if(key==='draw'||key==='devotional'||key==='claude')updStreak(key,d,app.statuses[sk]==='C');
-  save();renderToday();
-}
 function togTodayTask(d,i){
   const sk=`${d}_${i}`;const cur=app.statuses[sk]||'';
   app.statuses[sk]=cur===''?'C':cur==='C'?'NC':'';
   save();renderToday();renderWeek();
+}
+
+function togCI(d,key){
+  const sk=`${d}_ci_${key}`;const cur=app.statuses[sk]||'';
+  app.statuses[sk]=cur===''?'C':cur==='C'?'NC':'';
+  if(key==='draw'||key==='devotional'||key==='outreach')updStreak(key,d,app.statuses[sk]==='C');
+  save();renderToday();
 }
 function updStreak(type,d,done){
   const arr=app.streaks[type]||[];const i=arr.indexOf(d);
@@ -851,7 +835,7 @@ function renderWeek(){
 function togTask(d,i){
   const sk=`${d}_${i}`;const cur=app.statuses[sk]||'';
   app.statuses[sk]=cur===''?'C':cur==='C'?'NC':'';
-  save();renderWeek();
+  save();renderWeek();renderToday();
 }
 function changeWeek(dir){weekOff=Math.max(0,weekOff+dir);renderWeek();}
 
@@ -913,7 +897,7 @@ async function applyUpdate(){
   const summary=dates.map(d=>{const tasks=getTasks(d);return `${DAY_NAMES[d.getDay()]} ${fmtDate(d)}: ${tasks.map(t=>t.cat+': '+t.desc).join(' | ')}`;}).join('\n');
   const todayStr = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
   const weekDateMap = dates.map(d=>DAYS_STR[d.getDay()]+' = '+d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})).join(', ');
-  const sys='You are Arnold Randall planning assistant. Adjust his weekly schedule based on his update. Today is '+todayStr+'. This week exact dates: '+weekDateMap+'. CRITICAL: When Arnold mentions a specific date like April 3rd or next Friday, match it to the EXACT date in the week map above. Never put an event on the wrong date. Context: Artist/futurist. Scalogic AI agency (partner Kojo). CS platform (88 free users). Goals: Scalogic 2-4 clients/mo, CS growth. Non-negotiables: devotional 6:15am, draw 6:30am daily, admin 5pm. Workout Mon/Wed/Fri 8:45am. M/W/Th blocked 7-8:45am (school drop) and 2-3:30pm (school pickup) until June 12. Claude Mastery 1.5hrs on Tue/Thu/Sat/Sun. IG posting: @arnoldrandallart 2-3x/wk, @scalogicai 2-3x/wk, @artlifeandstyle 3x/wk, @curriculumsociety daily text banner. Priority: 1)Scalogic 2)CS 3)Art 4)Substack. Current week: '+summary+'. Return ONLY valid JSON no markdown: {"mon":[{"time":"...","cat":"...","desc":"..."}],"tue":[...],"wed":[...],"thu":[...],"fri":[...],"sat":[...],"sun":[...],"summary":"one sentence"}';
+  const sys='You are Arnold Randall planning assistant. Adjust his weekly schedule based on his update. Today is '+todayStr+'. This week exact dates: '+weekDateMap+'. CRITICAL: When Arnold mentions a specific date or day name, match it to the EXACT date in the week map above. Context: Arnold is in a 16-day sprint (June 14–29) focused ONLY on Scalogic, Curriculum Society, and LinkedIn. Scalogic AI agency with partner Kojo. CS has 88 users. Rent due July 1. Non-negotiables: devotional 6:15am, workout 6:30am (30 min), draw 7am (30 min). Daily targets: 5 web comps + 10 audits (Scalogic), 1 CS IG post + 3-5 influencer outreaches, 5 LinkedIn apps. Everything else is on ice. Priority: 1)Scalogic 2)CS 3)LinkedIn. Current week: '+summary+'. Return ONLY valid JSON no markdown: {"mon":[{"time":"...","cat":"...","desc":"..."}],"tue":[...],"wed":[...],"thu":[...],"fri":[...],"sat":[...],"sun":[...],"summary":"one sentence"}';
   try{
     const data = await aiCall(sys, upd);
     const text=(data.content?.[0]?.text||'').replace(/```json|```/g,'').trim();
@@ -1074,7 +1058,7 @@ renderToday();renderWeek();
 // SETTINGS — Base Schedule Editor
 let editingDay = 'mon';
 const DAY_LABELS = {mon:'Monday',tue:'Tuesday',wed:'Wednesday',thu:'Thursday',fri:'Friday',sat:'Saturday',sun:'Sunday'};
-const CAT_OPTIONS = ['DEVOTIONAL','WORKOUT','ART • CREATE','ART • POST','ART LIFE+STYLE','SUBSTACK','MONEY • SCALOGIC','MONEY • CS','CURRICULUM','LEARNING','CLAUDE MASTERY','SCALOGIC ADMIN','POST','FAMILY','ADMIN','LEISURE','PERSONAL'];
+const CAT_OPTIONS = ['DEVOTIONAL','WORKOUT','ART • CREATE','ART • POST','ART LIFE+STYLE','SUBSTACK','MONEY • SCALOGIC','MONEY • CS','CURRICULUM','LEARNING','SCALOGIC ADMIN','POST','FAMILY','ADMIN','LEISURE','PERSONAL'];
 
 function getBaseSched() {
   try {
