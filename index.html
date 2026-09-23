@@ -542,7 +542,7 @@ button:active{transform:scale(.96);}
       <input id="sb-key-input" placeholder="Supabase anon public key" style="width:100%;background:#272727;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px 12px;font-family:'Space Mono',monospace;font-size:11px;color:#F0EDE8;margin-bottom:10px">
       <div style="display:flex;gap:8px">
         <button onclick="connectSupabase()" style="padding:9px 18px;background:#69A2D7;color:#111;border:none;border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.08em">Connect</button>
-        <button onclick="syncAllFromCloud()" style="padding:9px 14px;background:none;color:#5A5550;border:1px solid rgba(255,255,255,0.14);border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em">Sync now</button>
+        <button id="sync-cloud-btn46" onclick="manualSync46()" style="padding:9px 14px;background:none;color:#DCCE73;border:1px solid rgba(255,255,255,0.14);border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em">Sync now</button>
       </div>
     </div>
 
@@ -1481,6 +1481,76 @@ async function migrateAndSync45(){
   }catch(e){console.log('v4.5 migration/sync error',e)}
 }
 if(sb) migrateAndSync45();
+
+
+// ── V4.6 VERIFIED CLOUD SYNC ────────────────────────────────────────
+// One explicit sync path: saved credentials -> client -> verify -> pull shared
+// record -> hydrate in-memory stores -> render. The manual button never depends
+// on a stale UI flag and does not publish local phone data before pulling.
+let syncBusy46=false;
+function syncBtn46(label,busy=false){
+  const b=document.getElementById('sync-cloud-btn46'); if(!b)return;
+  b.textContent=label; b.disabled=busy; b.style.opacity=busy?'.55':'1';
+  b.style.cursor=busy?'wait':'pointer';
+}
+async function verifyCloud46(){
+  if(!sb && !initSupabase()) return {ok:false,msg:'Missing or invalid saved connection'};
+  try{
+    const {error}=await sb.from('ar_data').select('uid').limit(1);
+    if(error) return {ok:false,msg:error.message||'Cloud verification failed'};
+    return {ok:true};
+  }catch(e){return {ok:false,msg:e.message||'Cloud verification failed'}}
+}
+async function pullShared46(){
+  const keys=['ar_plan_v3','ar_notes_v1','ar_base_sched','ar_os_v41','ar_os_v42'];
+  const vals=await Promise.all(keys.map(k=>cloudLoadForUid45(k,SHARED_UID45)));
+  const found=vals.some(v=>v!==null);
+  if(!found) throw new Error('No shared Command Center data found yet. Open v4.6 on desktop first.');
+  vals.forEach((v,i)=>{if(v!==null)localStorage.setItem(keys[i],JSON.stringify(v))});
+  if(vals[0]) app=vals[0];
+  if(vals[3]) os=Object.assign({},DEFAULT_OS,vals[3]);
+  if(vals[4]){
+    os42=Object.assign({weeks:{},commitments:[],locks:{},reviewNotes:{},drifts:[],revenueLog:[],dayClosures:{}},vals[4]);
+    if(!Array.isArray(os42.commitments))os42.commitments=[];
+    if(!Array.isArray(os42.revenueLog))os42.revenueLog=[];
+    if(!os42.dayClosures)os42.dayClosures={};
+  }
+  renderOS(); renderOS42();
+  try{renderToday()}catch(e){}
+  try{renderSettings()}catch(e){}
+}
+async function manualSync46(){
+  if(syncBusy46)return; syncBusy46=true; syncBtn46('SYNCING…',true);
+  const msg=document.getElementById('cloud-status-msg');
+  if(msg){msg.style.color='#DCCE73';msg.textContent='Checking cloud connection…'}
+  try{
+    const v=await verifyCloud46(); if(!v.ok)throw new Error(v.msg);
+    await pullShared46();
+    if(msg){msg.style.color='#4CAF82';msg.textContent='✓ Verified and synced from shared cloud data.'}
+    syncBtn46('SYNCED ✓',false); setTimeout(()=>syncBtn46('SYNC FROM CLOUD',false),1800);
+  }catch(e){
+    if(msg){msg.style.color='#E47C6C';msg.textContent='Sync failed: '+e.message}
+    syncBtn46('TRY SYNC AGAIN',false);
+  }finally{syncBusy46=false}
+}
+// Replace optimistic "connected" copy with verified state and keep the button live.
+const _renderSettings46=renderSettings;
+renderSettings=function(){
+  _renderSettings46();
+  const savedUrl=localStorage.getItem('_sbUrl')||'', savedKey=localStorage.getItem('_sbKey')||'';
+  const msg=document.getElementById('cloud-status-msg');
+  if(savedUrl&&savedKey){
+    if(msg){msg.style.color='#DCCE73';msg.textContent='Connection saved. Tap Sync from cloud to verify and pull the shared data.'}
+    syncBtn46('SYNC FROM CLOUD',false);
+  }else syncBtn46('ADD CONNECTION FIRST',false);
+};
+// On load, initialize from saved credentials but do not let a mobile local copy
+// overwrite the shared record. Auto-pull only after verification.
+setTimeout(async()=>{
+  const savedUrl=localStorage.getItem('_sbUrl')||'', savedKey=localStorage.getItem('_sbKey')||'';
+  if(savedUrl&&savedKey){ if(!sb)initSupabase(); try{await manualSync46()}catch(e){} }
+},350);
+
 </script>
 </body>
 </html>
