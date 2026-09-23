@@ -542,7 +542,7 @@ button:active{transform:scale(.96);}
       <input id="sb-key-input" placeholder="Supabase anon public key" style="width:100%;background:#272727;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px 12px;font-family:'Space Mono',monospace;font-size:11px;color:#F0EDE8;margin-bottom:10px">
       <div style="display:flex;gap:8px">
         <button onclick="connectSupabase()" style="padding:9px 18px;background:#69A2D7;color:#111;border:none;border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.08em">Connect</button>
-        <button id="sync-cloud-btn46" onclick="manualSync46()" style="padding:9px 14px;background:none;color:#DCCE73;border:1px solid rgba(255,255,255,0.14);border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em">Sync now</button>
+        <button id="sync-cloud-btn46" onclick="manualPull47()" style="padding:9px 14px;background:none;color:#DCCE73;border:1px solid rgba(255,255,255,0.14);border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em">PULL FROM CLOUD</button><button id="push-cloud-btn47" onclick="manualPush47()" style="padding:9px 14px;background:none;color:#69D7B0;border:1px solid rgba(255,255,255,0.14);border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em">PUSH THIS DEVICE</button>
       </div>
     </div>
 
@@ -1086,9 +1086,7 @@ function updateCloudStatusUI() {
 }
 
 // Init Supabase if keys exist
-if (initSupabase()) {
-  syncAllFromCloud();
-}
+if (initSupabase()) { /* v4.7: connection initialized; sync is explicit */ }
 
 try{renderOS();}catch(e){}
 
@@ -1435,7 +1433,8 @@ async function hydrateOperational44(){
     renderOS();renderOS42();
   }catch(e){console.log('v4.4 operational hydrate error',e)}
 }
-if(sb) hydrateOperational44();
+// v4.7 explicit sync only
+// if(sb) hydrateOperational44();
 
 
 // ── V4.5 TRUE CROSS-DEVICE IDENTITY MIGRATION ───────────────────────
@@ -1452,7 +1451,7 @@ async function cloudSaveForUid45(key,value,uid){
 function substantive45(key,v){
   if(!v)return false;
   if(key==='ar_os_v42')return (v.commitments&&v.commitments.length)||(v.revenueLog&&v.revenueLog.length)||(v.dayClosures&&Object.keys(v.dayClosures).length)||(v.weeks&&Object.keys(v.weeks).length);
-  if(key==='ar_os_v41')return (v.primaryDone&&Object.keys(v.primaryDone).length)||(v.workouts&&v.workouts.length)||(v.ideas&&v.ideas.length);
+  if(key==='ar_os_v41')return (v.primaryDone&&Object.keys(v.primaryDone).length)||(v.workouts&&Object.keys(v.workouts).length)||(v.ideas&&v.ideas.length);
   return true;
 }
 async function migrateAndSync45(){
@@ -1480,7 +1479,8 @@ async function migrateAndSync45(){
     updateCloudStatusUI();
   }catch(e){console.log('v4.5 migration/sync error',e)}
 }
-if(sb) migrateAndSync45();
+// v4.7: no automatic migration/pull; explicit push/pull prevents stale cloud from overwriting local truth.
+// if(sb) migrateAndSync45();
 
 
 // ── V4.6 VERIFIED CLOUD SYNC ────────────────────────────────────────
@@ -1551,6 +1551,79 @@ setTimeout(async()=>{
   if(savedUrl&&savedKey){ if(!sb)initSupabase(); try{await manualSync46()}catch(e){} }
 },350);
 
+
+
+// ── V4.7 EXPLICIT SOURCE-OF-TRUTH SYNC ──────────────────────────────
+// No automatic pull on launch. Desktop can PUSH its authoritative local state;
+// phone can PULL it. Success is only shown after operational checksum matches.
+function localPayload47(){
+  const keys=['ar_plan_v3','ar_notes_v1','ar_base_sched','ar_os_v41','ar_os_v42'];
+  const out={};
+  for(const k of keys){try{const raw=localStorage.getItem(k);out[k]=raw?JSON.parse(raw):null}catch(e){out[k]=null}}
+  // Always use live in-memory operational state so a recent workout/checkoff cannot be missed.
+  out.ar_os_v41=os; out.ar_os_v42=os42; out.ar_plan_v3=app;
+  return out;
+}
+function checksum47(v41,v42){
+  const wc=v41&&v41.workouts?Object.keys(v41.workouts).filter(k=>v41.workouts[k]).length:0;
+  const cc=v42&&Array.isArray(v42.commitments)?v42.commitments.length:0;
+  const dc=v42&&v42.dayClosures?Object.keys(v42.dayClosures).length:0;
+  return {workouts:wc,commitments:cc,closures:dc};
+}
+async function saveShared47(payload){
+  for(const [k,v] of Object.entries(payload)){
+    if(v===null)continue;
+    const ok=await cloudSaveForUid45(k,v,SHARED_UID45);
+    if(!ok)throw new Error('Could not save '+k);
+  }
+  // verify by reading back the two operational stores
+  const a=await cloudLoadForUid45('ar_os_v41',SHARED_UID45);
+  const b=await cloudLoadForUid45('ar_os_v42',SHARED_UID45);
+  if(!a||!b)throw new Error('Cloud write could not be verified');
+  return checksum47(a,b);
+}
+async function manualPush47(){
+  const msg=document.getElementById('cloud-status-msg'), btn=document.getElementById('push-cloud-btn47');
+  if(btn){btn.disabled=true;btn.textContent='PUSHING…'}
+  try{
+    const v=await verifyCloud46(); if(!v.ok)throw new Error(v.msg);
+    // persist current live state locally first
+    localStorage.setItem('ar_os_v41',JSON.stringify(os));
+    localStorage.setItem('ar_os_v42',JSON.stringify(os42));
+    localStorage.setItem('ar_plan_v3',JSON.stringify(app));
+    const c=await saveShared47(localPayload47());
+    if(msg){msg.style.color='#4CAF82';msg.textContent=`✓ This device is now the cloud source. Cloud has ${c.workouts} workout log(s), ${c.commitments} commitment(s).`}
+    if(btn){btn.textContent='PUSHED ✓';setTimeout(()=>btn.textContent='PUSH THIS DEVICE',1800)}
+  }catch(e){if(msg){msg.style.color='#E47C6C';msg.textContent='Push failed: '+(e.message||e)};if(btn)btn.textContent='TRY PUSH AGAIN'}
+  finally{if(btn)btn.disabled=false}
+}
+async function manualPull47(){
+  if(syncBusy46)return; syncBusy46=true; syncBtn46('PULLING…',true);
+  const msg=document.getElementById('cloud-status-msg');
+  try{
+    const v=await verifyCloud46(); if(!v.ok)throw new Error(v.msg);
+    const cloud41=await cloudLoadForUid45('ar_os_v41',SHARED_UID45);
+    const cloud42=await cloudLoadForUid45('ar_os_v42',SHARED_UID45);
+    if(!cloud41||!cloud42)throw new Error('Shared operational data is missing. Push from desktop first.');
+    const expected=checksum47(cloud41,cloud42);
+    await pullShared46();
+    const actual=checksum47(os,os42);
+    if(JSON.stringify(expected)!==JSON.stringify(actual))throw new Error('Pulled data did not hydrate correctly');
+    if(msg){msg.style.color='#4CAF82';msg.textContent=`✓ Pulled and verified: ${actual.workouts} workout log(s), ${actual.commitments} commitment(s).`}
+    syncBtn46('PULLED ✓',false);setTimeout(()=>syncBtn46('PULL FROM CLOUD',false),1800);
+  }catch(e){if(msg){msg.style.color='#E47C6C';msg.textContent='Pull failed: '+(e.message||e)};syncBtn46('TRY PULL AGAIN',false)}
+  finally{syncBusy46=false}
+}
+// Make Settings language explicit; a saved key is not proof of sync.
+const _renderSettings47=renderSettings;
+renderSettings=function(){
+  _renderSettings47();
+  const msg=document.getElementById('cloud-status-msg');
+  const saved=localStorage.getItem('_sbUrl')&&localStorage.getItem('_sbKey');
+  if(saved&&msg){msg.style.color='#DCCE73';msg.textContent='Connection saved. Desktop: PUSH THIS DEVICE. Phone: PULL FROM CLOUD.'}
+  syncBtn46('PULL FROM CLOUD',false);
+};
+try{renderSettings()}catch(e){}
 </script>
 </body>
 </html>
