@@ -1033,12 +1033,15 @@ async function syncAllFromCloud() {
   if (!sb) return;
   setSS('go', 'Syncing...', 'sync-today');
   try {
-    const [planData, notesData, schedData] = await Promise.all([
-      cloudLoad('ar_plan_v3'), cloudLoad('ar_notes_v1'), cloudLoad('ar_base_sched')
+    const [planData, notesData, schedData, osData, os42Data] = await Promise.all([
+      cloudLoad('ar_plan_v3'), cloudLoad('ar_notes_v1'), cloudLoad('ar_base_sched'),
+      cloudLoad('ar_os_v41'), cloudLoad('ar_os_v42')
     ]);
     if (planData) { app = planData; localStorage.setItem('ar_plan_v3', JSON.stringify(app)); }
     if (notesData) localStorage.setItem('ar_notes_v1', JSON.stringify(notesData));
     if (schedData) localStorage.setItem('ar_base_sched', JSON.stringify(schedData));
+    if (osData) localStorage.setItem('ar_os_v41', JSON.stringify(osData));
+    if (os42Data) localStorage.setItem('ar_os_v42', JSON.stringify(os42Data));
     setSS('ok', 'Synced ✓', 'sync-today');
     setTimeout(() => setSS('', '—', 'sync-today'), 3000);
     renderToday();
@@ -1292,7 +1295,7 @@ const DEFAULT_OS={
 function loadOS(){try{return Object.assign({},DEFAULT_OS,JSON.parse(localStorage.getItem(OSK)||'{}'));}catch(e){return JSON.parse(JSON.stringify(DEFAULT_OS));}}
 let os=loadOS();
 function saveOS(){localStorage.setItem(OSK,JSON.stringify(os));if(sb)cloudSave(OSK,os);renderOS();}
-function osDate(d=new Date()){return d.toISOString().split('T')[0]}
+function osDate(d=new Date()){const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')}
 function osDow(d=new Date()){return DAYS_STR[d.getDay()]}
 function weekKey(d=new Date()){const x=new Date(d);const dow=x.getDay();x.setDate(x.getDate()-(dow===0?6:dow-1));return osDate(x)}
 function anchorDefs(d=new Date()){const arr=[['god','God before feed','Prayer / Scripture before recreational scrolling'],['primary','Primary work first','Complete the day’s primary focus before recreational scrolling']];if([1,3,5].includes(d.getDay()))arr.push(['workout','Train','Strength / cardio / mobility']);return arr}
@@ -1338,7 +1341,7 @@ function weekStart42(index){const d=new Date(OS42_START);d.setDate(d.getDate()+i
 function currentWeekIndex42(){const n=new Date();n.setHours(0,0,0,0);const sun=new Date('2026-09-20T00:00:00');if(n<=sun)return 0;return Math.max(0,Math.floor((n-OS42_START)/604800000))}
 function selectedWeekIndex42(){return currentWeekIndex42()+osWeekOffset42}
 function wk42(i=selectedWeekIndex42()){return 'w'+String(i+1).padStart(2,'0')}
-function date42(d){return d.toISOString().slice(0,10)}
+function date42(d){const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')}
 function fmtRange42(start){const end=new Date(start);end.setDate(end.getDate()+6);const a=start.toLocaleDateString('en-US',{month:'short',day:'numeric'});const b=end.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});return a+'–'+b}
 function cloneOutcomes42(){return JSON.parse(JSON.stringify(DEFAULT_OS.outcomes))}
 function ensureWeek42(i=selectedWeekIndex42()){const k=wk42(i);if(!os42.weeks[k])os42.weeks[k]={outcomes:cloneOutcomes42()};return os42.weeks[k]}
@@ -1405,7 +1408,32 @@ const _toggleAnchor43=toggleAnchor;toggleAnchor=function(k){_toggleAnchor43(k);i
 // Make revenue scoreboard inputs and transaction log coexist: manual edits remain valid until log entries are used.
 const _saveRevenue43=saveRevenue;saveRevenue=function(){_saveRevenue43();renderOS42()};
 
+
 renderOS42();
+
+// ── V4.4 CROSS-DEVICE OPERATIONAL SYNC + LOCAL-TIME FIX ─────────────
+// v4.3 saved commitments/workouts/revenue to cloud, but the general Sync routine
+// did not hydrate those operational stores on another device. This hydrates them
+// after all v4 state objects exist, then re-renders the dashboard.
+async function hydrateOperational44(){
+  if(!sb) return;
+  try{
+    const [osData, os42Data] = await Promise.all([cloudLoad('ar_os_v41'), cloudLoad('ar_os_v42')]);
+    if(osData){
+      localStorage.setItem('ar_os_v41',JSON.stringify(osData));
+      os=Object.assign({},DEFAULT_OS,osData);
+    }
+    if(os42Data){
+      localStorage.setItem('ar_os_v42',JSON.stringify(os42Data));
+      os42=Object.assign({weeks:{},commitments:[],locks:{},reviewNotes:{},drifts:[],revenueLog:[],dayClosures:{}},os42Data);
+      if(!Array.isArray(os42.commitments)) os42.commitments=[];
+      if(!Array.isArray(os42.revenueLog)) os42.revenueLog=[];
+      if(!os42.dayClosures) os42.dayClosures={};
+    }
+    renderOS();renderOS42();
+  }catch(e){console.log('v4.4 operational hydrate error',e)}
+}
+if(sb) hydrateOperational44();
 </script>
 </body>
 </html>
