@@ -1002,10 +1002,12 @@ function initSupabase() {
   return false;
 }
 
+const SHARED_UID45 = 'ar_command_center_primary_v45';
 function getUserId() {
-  let uid = localStorage.getItem('_ar_uid');
-  if (!uid) { uid = 'ar_' + Math.random().toString(36).slice(2,11); localStorage.setItem('_ar_uid', uid); }
-  return uid;
+  // v4.5: every device using this personal Command Center + Supabase project
+  // reads/writes the same cloud record. Older versions generated a different
+  // uid per browser, which is why desktop and mobile could never truly sync.
+  return SHARED_UID45;
 }
 
 async function cloudSave(key, value) {
@@ -1394,14 +1396,14 @@ function renderRevenue43(){const logs=[...os42.revenueLog].sort((a,b)=>(b.date||
 function addRevenue43(){const amount=Number(document.getElementById('rev-amount43').value)||0;if(amount<=0)return;os42.revenueLog.push({id:String(Date.now()),type:document.getElementById('rev-type43').value,amount,note:document.getElementById('rev-note43').value.trim(),date:date42(new Date())});recalcRevenue43();save42();renderRevenue43()}
 function deleteRevenue43(id){os42.revenueLog=os42.revenueLog.filter(x=>String(x.id)!==String(id));recalcRevenue43();save42();renderRevenue43()}
 
-function openCloseDay43(){const ds=date42(new Date()),existing=os42.dayClosures[ds]||{},done=!!os.primaryDone[ds];document.getElementById('close-day-body43').innerHTML=`<div style="font-size:12px;color:var(--muted);line-height:1.5;margin:8px 0 14px">Plan Integrity is driven by the Primary Outcome — not by how many small items you checked off.</div><label class="label42">Primary outcome achieved?</label><div class="seg42"><button id="close-yes43" class="${done?'active':''}" onclick="setCloseOutcome43(true)">Yes</button><button id="close-no43" class="${!done?'active':''}" onclick="setCloseOutcome43(false)">No</button></div><label class="label42">What carries forward?</label><textarea class="field42" id="close-carry43" rows="3" placeholder="Optional note…">${esc42(existing.carry||'')}</textarea>`;document.getElementById('close-day-modal43').dataset.outcome=done?'yes':'no';document.getElementById('close-day-modal43').classList.add('open')}
+function openCloseDay43(dateOverride){const ds=dateOverride||date42(new Date()),existing=os42.dayClosures[ds]||{},done=existing.closed?!!existing.achieved:!!os.primaryDone[ds];document.getElementById('close-day-body43').innerHTML=`<div style="font-size:12px;color:var(--muted);line-height:1.5;margin:8px 0 14px">Plan Integrity is driven by the Primary Outcome — not by how many small items you checked off. You can also correct a past day if you forgot to close it.</div><label class="label42">Day</label><input class="field42" id="close-date43" type="date" max="${date42(new Date())}" value="${ds}" onchange="openCloseDay43(this.value)"><label class="label42">Primary outcome achieved?</label><div class="seg42"><button id="close-yes43" class="${done?'active':''}" onclick="setCloseOutcome43(true)">Yes</button><button id="close-no43" class="${!done?'active':''}" onclick="setCloseOutcome43(false)">No</button></div><label class="label42">What carries forward?</label><textarea class="field42" id="close-carry43" rows="3" placeholder="Optional note…">${esc42(existing.carry||'')}</textarea>`;document.getElementById('close-day-modal43').dataset.outcome=done?'yes':'no';document.getElementById('close-day-modal43').dataset.date=ds;document.getElementById('close-day-modal43').classList.add('open')}
 function setCloseOutcome43(v){document.getElementById('close-day-modal43').dataset.outcome=v?'yes':'no';document.getElementById('close-yes43').classList.toggle('active',v);document.getElementById('close-no43').classList.toggle('active',!v)}
-function saveCloseDay43(){const ds=date42(new Date()),yes=document.getElementById('close-day-modal43').dataset.outcome==='yes';os.primaryDone[ds]=yes;os42.dayClosures[ds]={closed:true,achieved:yes,carry:document.getElementById('close-carry43').value.trim(),closedAt:new Date().toISOString()};saveOS();save42();closeModal43('close-day-modal43')}
+function saveCloseDay43(){const modal=document.getElementById('close-day-modal43'),ds=modal.dataset.date||date42(new Date()),yes=modal.dataset.outcome==='yes';os.primaryDone[ds]=yes;os42.dayClosures[ds]={closed:true,achieved:yes,carry:document.getElementById('close-carry43').value.trim(),closedAt:new Date().toISOString()};saveOS();save42();closeModal43('close-day-modal43')}
 
 // Override v4.2 renderers with operational v4.3 versions.
 renderOutcomeDays42=function(){const c=document.getElementById('outcome-days');if(!c)return;const i=selectedWeekIndex42(),start=weekStart42(i),w=ensureWeek42(i);c.innerHTML='';['mon','tue','wed','thu','fri','sat','sun'].forEach((dow,j)=>{const d=new Date(start);d.setDate(start.getDate()+j);const ds=date42(d),o=w.outcomes[dow],cs=commitmentsFor42(ds);c.innerHTML+=`<div class="outcome-day"><div class="outcome-top"><div class="outcome-dow">${dow.toUpperCase()}</div><div class="outcome-proj">${o.project}</div><div style="margin-left:auto;font-family:Space Mono;font-size:8px;color:var(--muted)">${d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'})}</div></div><div class="outcome-text">${o.title}</div><textarea class="outcome-edit" rows="2" onchange="saveOutcome42('${dow}','title',this.value)">${o.title}</textarea><textarea class="outcome-edit" rows="2" onchange="saveOutcome42('${dow}','done',this.value)" aria-label="Done means">${o.done}</textarea><div class="commit-list42">${cs.map(x=>`<div class="commit42 ${x.completed?'done43':''}"><button class="check43 ${x.completed?'done':''}" onclick="toggleCommit43('${x.id}')">✓</button><div class="commit-time42">${x.time?formatTime42(x.time):'ANYTIME'}</div><div class="commit-title42">${esc42(x.title)}</div><div class="commit-actions43"><button class="icon-btn43" onclick="openEditCommit43('${x.id}')">•••</button></div></div>`).join('')}</div><button class="add-commit42" onclick="openCommitment42('${ds}')">+ Add item</button></div>`})};
 
-renderToday42=function(){const t=document.getElementById('today-timeline42');if(!t)return;const now=new Date(),ds=date42(now),cs=commitmentsFor42(ds),old=unfinishedBeforeToday43();let html='';if(old.length)html+=`<div class="carry43"><div class="carry-label43">Unfinished · choose what moves forward</div>${old.map(c=>`<div class="carry-row43"><span>${esc42(c.title)} · ${c.date}</span><button class="carry-btn43" onclick="carryForward43('${c.id}')">Carry forward</button><button class="icon-btn43" onclick="dismissCarry43('${c.id}')">×</button></div>`).join('')}</div>`;html+=cs.length?cs.map(c=>`<div class="timeline-item42 ${c.completed?'done43':''}"><button class="check43 ${c.completed?'done':''}" onclick="toggleCommit43('${c.id}')">✓</button><div class="timeline-time42">${c.time?formatTime42(c.time):'ANYTIME'}</div><div class="timeline-title42">${esc42(c.title)}</div><button class="icon-btn43" onclick="openEditCommit43('${c.id}')">•••</button></div>`).join(''):'<div style="font-size:12px;color:var(--muted);padding:4px 2px 12px">No commitments today.</div>';t.innerHTML=html;const nx=document.getElementById('next42');let tomorrow=new Date(now);tomorrow.setDate(now.getDate()+1);const po=outcomeForDate42(tomorrow),nc=commitmentsFor42(date42(tomorrow)).find(x=>!x.completed);nx.innerHTML=`<div class="next-k42">Next · ${DAY_NAMES[tomorrow.getDay()]}</div><div class="next-t42">${po.title}</div><div class="next-s42">${po.project}${nc?' · Next item: '+(nc.time?formatTime42(nc.time)+' ':'')+esc42(nc.title):''}</div>`;const b=document.getElementById('close-day43');if(b){const closed=os42.dayClosures[ds]?.closed;b.textContent=closed?'Day closed ✓':'Close day';b.classList.toggle('closed',!!closed)}};
+renderToday42=function(){const t=document.getElementById('today-timeline42');if(!t)return;const now=new Date(),ds=date42(now),cs=commitmentsFor42(ds),old=unfinishedBeforeToday43();let html='';html+=cs.length?cs.map(c=>`<div class="timeline-item42 ${c.completed?'done43':''}"><button class="check43 ${c.completed?'done':''}" onclick="toggleCommit43('${c.id}')">✓</button><div class="timeline-time42">${c.time?formatTime42(c.time):'ANYTIME'}</div><div class="timeline-title42">${esc42(c.title)}</div><button class="icon-btn43" onclick="openEditCommit43('${c.id}')">•••</button></div>`).join(''):'<div style="font-size:12px;color:var(--muted);padding:4px 2px 12px">No commitments today.</div>';if(old.length){const latest=old[0].date;const ld=new Date(latest+'T12:00:00');const label=ld.toLocaleDateString('en-US',{weekday:'long'});html+=`<details class="carry43" style="margin-top:10px"><summary class="carry-label43" style="cursor:pointer;margin:0">${old.length} unfinished from ${label} / earlier · Review</summary><div style="margin-top:8px">${old.map(c=>`<div class="carry-row43"><span>${esc42(c.title)} · ${c.date}</span><button class="carry-btn43" onclick="carryForward43('${c.id}')">Carry forward</button><button class="icon-btn43" onclick="dismissCarry43('${c.id}')">×</button></div>`).join('')}</div></details>`}t.innerHTML=html;const nx=document.getElementById('next42');let tomorrow=new Date(now);tomorrow.setDate(now.getDate()+1);const po=outcomeForDate42(tomorrow),nc=commitmentsFor42(date42(tomorrow)).find(x=>!x.completed);nx.innerHTML=`<div class="next-k42">Next · ${DAY_NAMES[tomorrow.getDay()]}</div><div class="next-t42">${po.title}</div><div class="next-s42">${po.project}${nc?' · Next item: '+(nc.time?formatTime42(nc.time)+' ':'')+esc42(nc.title):''}</div>`;const b=document.getElementById('close-day43');if(b){const closed=os42.dayClosures[ds]?.closed;b.textContent=closed?'Day closed ✓':'Close day';b.classList.toggle('closed',!!closed)}};
 
 // Keep workout modal in sync when Train anchor is checked.
 const _toggleAnchor43=toggleAnchor;toggleAnchor=function(k){_toggleAnchor43(k);if(k==='workout'&&document.getElementById('workout-modal43').classList.contains('open'))renderWorkouts43();renderOS42()};
@@ -1434,6 +1436,51 @@ async function hydrateOperational44(){
   }catch(e){console.log('v4.4 operational hydrate error',e)}
 }
 if(sb) hydrateOperational44();
+
+
+// ── V4.5 TRUE CROSS-DEVICE IDENTITY MIGRATION ───────────────────────
+// v4.4 hydrated the right stores, but older builds generated _ar_uid per browser.
+// That meant desktop and phone were querying different rows in Supabase.
+async function cloudLoadForUid45(key, uid){
+  if(!sb||!uid) return null;
+  try{const {data,error}=await sb.from('ar_data').select('value').eq('uid',uid).eq('key',key).single();if(error||!data)return null;return JSON.parse(data.value)}catch(e){return null}
+}
+async function cloudSaveForUid45(key,value,uid){
+  if(!sb||!uid)return false;
+  try{const {error}=await sb.from('ar_data').upsert({uid,key,value:JSON.stringify(value),updated_at:new Date().toISOString()},{onConflict:'uid,key'});return !error}catch(e){return false}
+}
+function substantive45(key,v){
+  if(!v)return false;
+  if(key==='ar_os_v42')return (v.commitments&&v.commitments.length)||(v.revenueLog&&v.revenueLog.length)||(v.dayClosures&&Object.keys(v.dayClosures).length)||(v.weeks&&Object.keys(v.weeks).length);
+  if(key==='ar_os_v41')return (v.primaryDone&&Object.keys(v.primaryDone).length)||(v.workouts&&v.workouts.length)||(v.ideas&&v.ideas.length);
+  return true;
+}
+async function migrateAndSync45(){
+  if(!sb)return;
+  const keys=['ar_plan_v3','ar_notes_v1','ar_base_sched','ar_os_v41','ar_os_v42'];
+  const legacy=localStorage.getItem('_ar_uid');
+  try{
+    let shared42=await cloudLoadForUid45('ar_os_v42',SHARED_UID45);
+    // Prefer a legacy cloud dataset with real operational content. This is the
+    // one-time bridge from the old per-device uid scheme to the shared uid.
+    if(!substantive45('ar_os_v42',shared42)&&legacy&&legacy!==SHARED_UID45){
+      const legacy42=await cloudLoadForUid45('ar_os_v42',legacy);
+      if(substantive45('ar_os_v42',legacy42)){
+        for(const k of keys){const v=await cloudLoadForUid45(k,legacy);if(v)await cloudSaveForUid45(k,v,SHARED_UID45)}
+      }else{
+        // If this browser has the authoritative local data (desktop), publish it.
+        const local42=load42();
+        if(substantive45('ar_os_v42',local42)){
+          for(const k of keys){try{const raw=localStorage.getItem(k);if(raw)await cloudSaveForUid45(k,JSON.parse(raw),SHARED_UID45)}catch(e){}}
+        }
+      }
+    }
+    await syncAllFromCloud();
+    await hydrateOperational44();
+    updateCloudStatusUI();
+  }catch(e){console.log('v4.5 migration/sync error',e)}
+}
+if(sb) migrateAndSync45();
 </script>
 </body>
 </html>
