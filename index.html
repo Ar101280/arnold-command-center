@@ -69,7 +69,7 @@ body{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:14px 8px 12px;cursor:pointer;gap:5px;
   border:none;background:none;
-  font-family:'Space Mono',monospace;
+  font-family:monospace;
   font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
   color:var(--muted);transition:color 0.12s;
   min-height:64px;
@@ -97,7 +97,7 @@ body{
   margin:1.25rem 0 1rem;
 }
 .hero-greeting{
-  font-family:'Space Mono',monospace;
+  font-family:monospace;
   font-size:34px;
   font-weight:700;
   color:var(--bg);
@@ -105,7 +105,7 @@ body{
   margin-bottom:8px;
 }
 .hero-sub{
-  font-family:'Space Mono',monospace;
+  font-family:monospace;
   font-size:13px;
   color:rgba(26,26,26,0.6);
   letter-spacing:0.04em;
@@ -115,7 +115,7 @@ body{
 /* ── HERO LAYOUT ─────────────────────── */
 .hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
 .hero-meta{
-  font-family:'Space Mono',monospace;
+  font-family:monospace;
   font-size:11px;color:rgba(26,26,26,0.5);
   letter-spacing:0.04em;margin-top:4px;
 }
@@ -123,13 +123,13 @@ body{
 .hero-ring{width:48px;height:48px;}
 .hero-ring-text{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
+  font-family:monospace;font-size:11px;font-weight:700;
   color:var(--bg);
 }
 
 /* ── SECTION LABEL ──────────────────────── */
 .sec-lbl{
-  font-family:'Space Mono',monospace;
+  font-family:monospace;
   font-size:11px;font-weight:700;
   letter-spacing:0.14em;text-transform:uppercase;
   color:var(--muted);margin:1.25rem 0 0.75rem;
@@ -143,7 +143,7 @@ body{
 }
 .ci-item-left{display:flex;flex-direction:column;gap:2px;}
 .ci-name{font-size:13px;font-weight:500;color:var(--text);line-height:1.3;}
-.ci-sub{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.04em;}
+.ci-sub{font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:0.04em;}
 .ci-btn{
   width:32px;height:32px;
   border-radius:50%;border:1.5px solid var(--border2);
@@ -162,7 +162,7 @@ body{
 .streak-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .streak-label{font-size:12px;font-weight:500;min-width:80px;}
 .streak-count{
-  font-family:'Space Mono',monospace;font-size:16px;font-weight:700;
+  font-family:monospace;font-size:16px;font-weight:700;
   min-width:28px;text-align:right;
 }
 .s-dots{display:flex;gap:3px;flex-wrap:wrap;flex:1;}
@@ -173,7 +173,7 @@ body{
 
 /* ── SYNC ───────────────────────────────── */
 .sync-line{
-  font-family:'Space Mono',monospace;font-size:9px;
+  font-family:monospace;font-size:9px;
   color:var(--muted);text-align:right;
   min-height:14px;letter-spacing:0.04em;margin-bottom:4px;
 }
@@ -196,7 +196,7 @@ body{
 .wn-btn:hover{background:var(--text);color:var(--bg);}
 .wn-label{
   flex:1;text-align:center;
-  font-family:'Space Mono',monospace;
+  font-family:monospace;
   font-size:13px;font-weight:700;
   letter-spacing:0.08em;text-transform:uppercase;color:var(--text);
 }
@@ -207,7 +207,7 @@ body{
   padding:16px;margin-bottom:0.75rem;
 }
 .update-label{
-  font-family:'Space Mono',monospace;font-size:9px;font-weight:700;
+  font-family:monospace;font-size:9px;font-weight:700;
   letter-spacing:0.14em;text-transform:uppercase;
   color:var(--muted);margin-bottom:8px;
 }
@@ -224,7 +224,7 @@ body{
 .btn-pill{
   padding:9px 18px;background:var(--text);color:var(--bg);
   border:none;border-radius:100px;cursor:pointer;
-  font-family:'Space Mono',monospace;font-size:10px;font-weight:700;
+  font-family:monospace;font-size:10px;font-weight:700;
   letter-spacing:0.1em;text-transform:uppercase;
   transition:opacity 0.12s;
 }
@@ -233,7 +233,7 @@ body{
 .btn-ghost{
   padding:9px 14px;background:none;color:var(--muted);
   border:1px solid var(--border2);border-radius:100px;cursor:pointer;
-  font-family:'Space Mono',monospace;font-size:10px;
+  font-family:monospace;font-size:10px;
   letter-spacing:0.08em;text-transform:uppercase;
 }
 .btn-ghost:hover{border-color:var(--text);color:var(--text);}
@@ -246,19 +246,19 @@ body{
   border-top:1px solid var(--border);gap:8px;
 }
 .day-name{
-  font-family:'Space Mono',monospace;
+  font-family:monospace;
   font-size:clamp(29px,8.5vw,44px);
   font-weight:700;letter-spacing:-0.02em;
   line-height:1;text-transform:uppercase;
   color:var(--text);flex:1;
 }
 .day-pill{
-  font-family:'Space Mono',monospace;font-size:11px;
+  font-family:monospace;font-size:11px;
   letter-spacing:0.06em;background:var(--surface2);
   color:var(--muted);padding:4px 10px;border-radius:100px;white-space:nowrap;
 }
 .day-pill.today-pill{background:var(--yellow);color:var(--bg);font-weight:700;}
-.day-cnt{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);}
+.day-cnt{font-family:monospace;font-size:11px;color:var(--muted);}
 .day-chev{font-size:12px;color:var(--muted2);}
 
 .task-list{display:none;flex-direction:column;gap:4px;padding:4px 0 12px;}
@@ -272,20 +272,20 @@ body{
   width:28px;height:28px;border-radius:50%;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
   font-size:11px;font-weight:700;margin-top:1px;
-  font-family:'Space Mono',monospace;
+  font-family:monospace;
 }
 .tc-body{flex:1;}
 .tc-cat{
-  font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
+  font-family:monospace;font-size:11px;font-weight:700;
   letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px;
 }
 .tc-desc{font-size:12px;line-height:1.5;color:rgba(240,237,232,0.75);}
 .tc-time{
-  font-family:'Space Mono',monospace;font-size:11px;
+  font-family:monospace;font-size:11px;
   color:var(--muted);letter-spacing:0.02em;margin-top:2px;
 }
 .tc-status{
-  font-family:'Space Mono',monospace;font-size:9px;
+  font-family:monospace;font-size:9px;
   min-width:28px;padding:3px 5px;border-radius:6px;
   border:1px solid var(--border2);background:none;cursor:pointer;
   color:var(--muted);text-align:center;flex-shrink:0;
@@ -310,21 +310,21 @@ body{
   border:1px solid var(--purple-bg);
 }
 .ninety-hero-title{
-  font-family:'Space Mono',monospace;
+  font-family:monospace;
   font-size:16px;font-weight:700;letter-spacing:0.1em;
   text-transform:uppercase;color:var(--purple);margin-bottom:8px;
 }
 .ninety-big{
-  font-family:'Space Mono',monospace;
+  font-family:monospace;
   font-size:58px;font-weight:700;color:var(--text);
   line-height:1;margin-bottom:4px;
 }
-.ninety-sub{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.04em;}
+.ninety-sub{font-family:monospace;font-size:11px;color:var(--muted);letter-spacing:0.04em;}
 
 .phase-legend{display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;}
 .leg{display:flex;align-items:center;gap:5px;}
 .leg-dot{width:8px;height:8px;border-radius:2px;}
-.leg-txt{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.04em;}
+.leg-txt{font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:0.04em;}
 
 .grid-90{
   display:grid;grid-template-columns:repeat(10,1fr);
@@ -333,7 +333,7 @@ body{
 .c90{
   aspect-ratio:1;border-radius:4px;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Space Mono',monospace;font-size:8px;font-weight:700;
+  font-family:monospace;font-size:8px;font-weight:700;
   cursor:pointer;transition:transform 0.1s;
 }
 .c90:hover{transform:scale(1.2);z-index:2;position:relative;}
@@ -351,7 +351,7 @@ body{
   padding:16px;display:none;margin-bottom:1rem;
 }
 .detail-title{
-  font-family:'Space Mono',monospace;font-size:10px;font-weight:700;
+  font-family:monospace;font-size:10px;font-weight:700;
   letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);
   margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);
 }
@@ -360,8 +360,8 @@ body{
   border-bottom:1px solid var(--border);align-items:flex-start;
 }
 .detail-task:last-child{border-bottom:none;}
-.detail-time{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);min-width:42px;padding-top:2px;}
-.detail-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;font-family:'Space Mono',monospace;}
+.detail-time{font-family:monospace;font-size:9px;color:var(--muted);min-width:42px;padding-top:2px;}
+.detail-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;font-family:monospace;}
 .detail-desc{font-size:12px;color:rgba(240,237,232,0.8);flex:1;line-height:1.5;}
 
 
@@ -431,22 +431,22 @@ button:active{transform:scale(.96);}
 }
 
 /* ── V4.1 OPERATING SYSTEM ───────────────── */
-.os-kicker{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.os-kicker{font-family:monospace;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 .os-hero{background:linear-gradient(145deg,#E8DA77,#CDBE58);border-radius:28px;padding:26px 24px;margin:1.25rem 0 1rem;color:#0A0A0A;box-shadow:0 24px 70px rgba(0,0,0,.35)}
-.os-day{font-family:'Space Mono',monospace;font-size:clamp(40px,12vw,72px);font-weight:700;line-height:.9;letter-spacing:-.06em;text-transform:uppercase}
-.os-date{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;margin-top:12px;opacity:.55}
+.os-day{font-family:monospace;font-size:clamp(40px,12vw,72px);font-weight:700;line-height:.9;letter-spacing:-.06em;text-transform:uppercase}
+.os-date{font-family:monospace;font-size:11px;letter-spacing:.12em;margin-top:12px;opacity:.55}
 .primary-card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.10);border-radius:24px;padding:22px;margin-bottom:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
-.primary-tag{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--yellow);margin-bottom:12px}
-.primary-project{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.primary-title{font-family:'Space Mono',monospace;font-size:clamp(28px,8vw,48px);font-weight:700;line-height:1.02;letter-spacing:-.045em;text-transform:uppercase;color:var(--text)}
+.primary-tag{font-family:monospace;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--yellow);margin-bottom:12px}
+.primary-project{font-family:monospace;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.primary-title{font-family:monospace;font-size:clamp(28px,8vw,48px);font-weight:700;line-height:1.02;letter-spacing:-.045em;text-transform:uppercase;color:var(--text)}
 .primary-done{font-size:13px;line-height:1.55;color:#AAA49D;margin-top:14px;max-width:620px}
 .focus-row{display:flex;justify-content:space-between;align-items:end;border-top:1px solid var(--border);margin-top:18px;padding-top:14px;gap:12px}
-.focus-time{font-family:'Space Mono',monospace;font-size:24px;font-weight:700;letter-spacing:-.04em}.focus-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
-.complete-primary{border:1px solid var(--border2);background:transparent;color:var(--text);border-radius:100px;padding:10px 14px;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.complete-primary.done{background:var(--green);color:#07110c;border-color:var(--green)}
-.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px}.stat-num{font-family:'Space Mono',monospace;font-size:clamp(28px,8vw,42px);font-weight:700;line-height:1;letter-spacing:-.06em}.stat-lbl{font-family:'Space Mono',monospace;font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-top:8px}.stat-num.green{color:var(--green)}.stat-num.yellow{color:var(--yellow)}
-.anchor-list{display:flex;flex-direction:column;gap:6px}.anchor{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 14px}.anchor-check{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);background:var(--surface2);color:var(--muted);font-size:13px}.anchor-check.done{background:var(--text);color:var(--bg)}.anchor-body{flex:1}.anchor-name{font-size:13px;font-weight:500}.anchor-sub{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px}
-.week-intro{margin:1.25rem 0 1rem}.week-title{font-family:'Space Mono',monospace;font-size:clamp(34px,10vw,58px);font-weight:700;line-height:.95;letter-spacing:-.055em;text-transform:uppercase}.week-sub{font-size:13px;color:var(--muted);margin-top:10px}
-.outcome-day{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:7px}.outcome-top{display:flex;align-items:center;gap:10px}.outcome-dow{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--yellow);min-width:38px}.outcome-proj{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}.outcome-text{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;line-height:1.15;margin-top:8px}.outcome-edit{width:100%;margin-top:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px;font-family:'Space Grotesk';font-size:13px}
+.focus-time{font-family:monospace;font-size:24px;font-weight:700;letter-spacing:-.04em}.focus-label{font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.complete-primary{border:1px solid var(--border2);background:transparent;color:var(--text);border-radius:100px;padding:10px 14px;font-family:monospace;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.complete-primary.done{background:var(--green);color:#07110c;border-color:var(--green)}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px}.stat-num{font-family:monospace;font-size:clamp(28px,8vw,42px);font-weight:700;line-height:1;letter-spacing:-.06em}.stat-lbl{font-family:monospace;font-size:8px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-top:8px}.stat-num.green{color:var(--green)}.stat-num.yellow{color:var(--yellow)}
+.anchor-list{display:flex;flex-direction:column;gap:6px}.anchor{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 14px}.anchor-check{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);background:var(--surface2);color:var(--muted);font-size:13px}.anchor-check.done{background:var(--text);color:var(--bg)}.anchor-body{flex:1}.anchor-name{font-size:13px;font-weight:500}.anchor-sub{font-family:monospace;font-size:9px;color:var(--muted);margin-top:2px}
+.week-intro{margin:1.25rem 0 1rem}.week-title{font-family:monospace;font-size:clamp(34px,10vw,58px);font-weight:700;line-height:.95;letter-spacing:-.055em;text-transform:uppercase}.week-sub{font-size:13px;color:var(--muted);margin-top:10px}
+.outcome-day{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:7px}.outcome-top{display:flex;align-items:center;gap:10px}.outcome-dow{font-family:monospace;font-size:11px;font-weight:700;color:var(--yellow);min-width:38px}.outcome-proj{font-family:monospace;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}.outcome-text{font-family:monospace;font-size:18px;font-weight:700;line-height:1.15;margin-top:8px}.outcome-edit{width:100%;margin-top:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px;font-family:'Space Grotesk';font-size:13px}
 .quarter-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:8px}.q-label{font-family:'Space Mono';font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.q-title{font-family:'Space Mono';font-size:20px;font-weight:700;margin-top:7px}.q-copy{font-size:12px;color:#9A958F;line-height:1.5;margin-top:7px}.q-bar{height:5px;background:var(--surface3);border-radius:99px;margin-top:14px;overflow:hidden}.q-fill{height:100%;background:var(--yellow);border-radius:99px}
 .park-box{background:#121212;border:1px dashed rgba(255,255,255,.13);border-radius:18px;padding:16px;margin-top:8px}.park-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.park-tag{font-family:'Space Mono';font-size:9px;color:var(--muted);padding:6px 9px;background:var(--surface2);border-radius:99px}
 .idea-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px;color:var(--text);font-size:13px;margin-top:8px}.tiny-btn{margin-top:8px;padding:9px 13px;border:0;border-radius:99px;background:var(--text);color:var(--bg);font-family:'Space Mono';font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
@@ -514,12 +514,12 @@ button:active{transform:scale(.96);}
   <!-- NOTES -->
   <div class="panel" id="panel-notes">
     <div style="margin:1rem 0 0.75rem;display:flex;align-items:center;gap:10px">
-      <span style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:-0.01em;color:#F0EDE8">Notes</span>
-      <span style="font-family:'Space Mono',monospace;font-size:10px;color:#5A5550;flex:1;text-align:right" id="notes-count">0 notes</span>
+      <span style="font-family:monospace;font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:-0.01em;color:#F0EDE8">Notes</span>
+      <span style="font-family:monospace;font-size:10px;color:#5A5550;flex:1;text-align:right" id="notes-count">0 notes</span>
     </div>
     <div style="background:#1E1E1E;border-radius:16px;padding:16px;margin-bottom:1rem">
       <textarea id="note-input" rows="4" placeholder="What's on your mind..." style="width:100%;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;font-family:'Space Grotesk',sans-serif;font-size:14px;background:#272727;color:#F0EDE8;resize:none;line-height:1.6;margin-bottom:10px"></textarea>
-      <button onclick="saveNote()" style="padding:10px 20px;background:#F0EDE8;color:#111;border:none;border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Save note</button>
+      <button onclick="saveNote()" style="padding:10px 20px;background:#F0EDE8;color:#111;border:none;border-radius:100px;cursor:pointer;font-family:monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Save note</button>
     </div>
     <div id="notes-list"></div>
   </div>
@@ -535,42 +535,42 @@ button:active{transform:scale(.96);}
   <!-- SETTINGS -->
   <div class="panel" id="panel-settings">
     <div style="margin:1rem 0 0.75rem;display:flex;align-items:center;gap:10px">
-      <span style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:-0.01em;color:#F0EDE8">Schedule</span>
-      <span style="font-family:'Space Mono',monospace;font-size:10px;color:#5A5550;flex:1;text-align:right">Default template</span>
+      <span style="font-family:monospace;font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:-0.01em;color:#F0EDE8">Schedule</span>
+      <span style="font-family:monospace;font-size:10px;color:#5A5550;flex:1;text-align:right">Default template</span>
     </div>
 
     <div style="background:#1E1E1E;border-radius:16px;padding:16px;margin-bottom:1rem" id="supabase-setup">
-      <div style="font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#69A2D7;margin-bottom:10px">☁ Cloud Storage</div>
-      <div style="font-family:'Space Mono',monospace;font-size:10px;color:#5A5550;margin-bottom:12px;line-height:1.6" id="cloud-status-msg">Not connected. Enter your Supabase keys to sync across all devices.</div>
-      <input id="sb-url-input" placeholder="Supabase Project URL" style="width:100%;background:#272727;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px 12px;font-family:'Space Mono',monospace;font-size:11px;color:#F0EDE8;margin-bottom:8px">
-      <input id="sb-key-input" placeholder="Supabase anon public key" style="width:100%;background:#272727;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px 12px;font-family:'Space Mono',monospace;font-size:11px;color:#F0EDE8;margin-bottom:10px">
+      <div style="font-family:monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#69A2D7;margin-bottom:10px">☁ Cloud Storage</div>
+      <div style="font-family:monospace;font-size:10px;color:#5A5550;margin-bottom:12px;line-height:1.6" id="cloud-status-msg">Not connected. Enter your Supabase keys to sync across all devices.</div>
+      <input id="sb-url-input" placeholder="Supabase Project URL" style="width:100%;background:#272727;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px 12px;font-family:monospace;font-size:11px;color:#F0EDE8;margin-bottom:8px">
+      <input id="sb-key-input" placeholder="Supabase anon public key" style="width:100%;background:#272727;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px 12px;font-family:monospace;font-size:11px;color:#F0EDE8;margin-bottom:10px">
       <div style="display:flex;gap:8px">
-        <button onclick="connectSupabase()" style="padding:9px 18px;background:#69A2D7;color:#111;border:none;border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.08em">Connect</button>
-        <button id="sync-cloud-btn46" onclick="manualPull47()" style="padding:9px 14px;background:none;color:#DCCE73;border:1px solid rgba(255,255,255,0.14);border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em">PULL FROM CLOUD</button><button id="push-cloud-btn47" onclick="manualPush47()" style="padding:9px 14px;background:none;color:#69D7B0;border:1px solid rgba(255,255,255,0.14);border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em">PUSH THIS DEVICE</button>
+        <button onclick="connectSupabase()" style="padding:9px 18px;background:#69A2D7;color:#111;border:none;border-radius:100px;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;letter-spacing:0.08em">Connect</button>
+        <button id="sync-cloud-btn46" onclick="manualPull47()" style="padding:9px 14px;background:none;color:#DCCE73;border:1px solid rgba(255,255,255,0.14);border-radius:100px;cursor:pointer;font-family:monospace;font-size:10px;letter-spacing:0.08em">PULL FROM CLOUD</button><button id="push-cloud-btn47" onclick="manualPush47()" style="padding:9px 14px;background:none;color:#69D7B0;border:1px solid rgba(255,255,255,0.14);border-radius:100px;cursor:pointer;font-family:monospace;font-size:10px;letter-spacing:0.08em">PUSH THIS DEVICE</button>
       </div>
     </div>
 
     <div style="background:#1E1E1E;border-radius:16px;padding:16px;margin-bottom:1rem">
-      <div style="font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#5A5570;margin-bottom:12px">Select day to edit</div>
+      <div style="font-family:monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#5A5570;margin-bottom:12px">Select day to edit</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap" id="day-selector">
-        <button onclick="selectDay('mon')" id="ds-mon" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">MON</button>
-        <button onclick="selectDay('tue')" id="ds-tue" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">TUE</button>
-        <button onclick="selectDay('wed')" id="ds-wed" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">WED</button>
-        <button onclick="selectDay('thu')" id="ds-thu" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">THU</button>
-        <button onclick="selectDay('fri')" id="ds-fri" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">FRI</button>
-        <button onclick="selectDay('sat')" id="ds-sat" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">SAT</button>
-        <button onclick="selectDay('sun')" id="ds-sun" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">SUN</button>
+        <button onclick="selectDay('mon')" id="ds-mon" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">MON</button>
+        <button onclick="selectDay('tue')" id="ds-tue" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">TUE</button>
+        <button onclick="selectDay('wed')" id="ds-wed" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">WED</button>
+        <button onclick="selectDay('thu')" id="ds-thu" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">THU</button>
+        <button onclick="selectDay('fri')" id="ds-fri" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">FRI</button>
+        <button onclick="selectDay('sat')" id="ds-sat" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">SAT</button>
+        <button onclick="selectDay('sun')" id="ds-sun" style="padding:7px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.14);background:none;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;color:#5A5550;letter-spacing:0.06em">SUN</button>
       </div>
     </div>
 
     <div id="day-editor" style="display:none">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <span style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:#F0EDE8;text-transform:uppercase;letter-spacing:0.08em" id="editing-day-label">Monday</span>
-        <button onclick="addTask()" style="padding:7px 14px;background:#DCCE73;color:#111;border:none;border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.08em">+ Add task</button>
+        <span style="font-family:monospace;font-size:11px;font-weight:700;color:#F0EDE8;text-transform:uppercase;letter-spacing:0.08em" id="editing-day-label">Monday</span>
+        <button onclick="addTask()" style="padding:7px 14px;background:#DCCE73;color:#111;border:none;border-radius:100px;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;letter-spacing:0.08em">+ Add task</button>
       </div>
       <div id="task-editor-list"></div>
-      <button onclick="saveBaseSchedule()" style="width:100%;margin-top:12px;padding:12px;background:#F0EDE8;color:#111;border:none;border-radius:100px;cursor:pointer;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Save to base schedule</button>
-      <div style="font-family:'Space Mono',monospace;font-size:9px;color:#5A5550;text-align:center;margin-top:8px">Changes apply to all future weeks</div>
+      <button onclick="saveBaseSchedule()" style="width:100%;margin-top:12px;padding:12px;background:#F0EDE8;color:#111;border:none;border-radius:100px;cursor:pointer;font-family:monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Save to base schedule</button>
+      <div style="font-family:monospace;font-size:9px;color:#5A5550;text-align:center;margin-top:8px">Changes apply to all future weeks</div>
     </div>
   </div>
 
@@ -586,19 +586,19 @@ button:active{transform:scale(.96);}
 
 
 <div style="position:fixed;bottom:0;left:0;right:0;display:flex;flex-direction:row;background:#1E1E1E;border-top:1px solid rgba(255,255,255,0.08);z-index:9999;padding-bottom:env(safe-area-inset-bottom,0)">
-  <button id="nb-today" onclick="showPanel('today',this)" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 4px;border:none;background:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#DCCE73;min-height:60px">
+  <button id="nb-today" onclick="showPanel('today',this)" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 4px;border:none;background:none;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#DCCE73;min-height:60px">
     <span style="font-size:18px;line-height:1">◎</span>Today
   </button>
-  <button id="nb-week" onclick="showPanel('week',this)" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 4px;border:none;background:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#5A5550;min-height:60px">
+  <button id="nb-week" onclick="showPanel('week',this)" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 4px;border:none;background:none;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#5A5550;min-height:60px">
     <span style="font-size:18px;line-height:1">▦</span>Week
   </button>
-  <button id="nb-ninety" onclick="showPanel('ninety',this)" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 4px;border:none;background:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#5A5550;min-height:60px">
+  <button id="nb-ninety" onclick="showPanel('ninety',this)" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 4px;border:none;background:none;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#5A5550;min-height:60px">
     <span style="font-size:18px;line-height:1">⊞</span>90 Days
   </button>
-  <button id="nb-notes" onclick="showPanel('notes',this)" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 4px;border:none;background:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#5A5550;min-height:60px">
+  <button id="nb-notes" onclick="showPanel('notes',this)" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 4px;border:none;background:none;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#5A5550;min-height:60px">
     <span style="font-size:18px;line-height:1">✎</span>Notes
   </button>
-  <button id="nb-settings" onclick="showPanel('settings',this)" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 4px;border:none;background:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#5A5550;min-height:60px">
+  <button id="nb-settings" onclick="showPanel('settings',this)" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 4px;border:none;background:none;cursor:pointer;font-family:monospace;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#5A5550;min-height:60px">
     <span style="font-size:18px;line-height:1">⚙</span>Schedule
   </button>
 </div>
@@ -975,7 +975,7 @@ function showDayDetail(n,date){
   document.getElementById('detail-body').innerHTML=tasks.map(t=>{
     const cat=CATS[t.cat]||{ic:'·',cls:'ic-gray'};
     const catColor=CAT_COLOR[t.cat]||'var(--muted)';
-    return `<div class="detail-task"><span class="detail-time">${t.time}</span><div class="detail-icon ${cat.cls}">${cat.ic}</div><div class="detail-desc"><span style="color:${catColor};font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.06em;display:block;margin-bottom:2px">${t.cat}</span>${t.desc}</div></div>`;
+    return `<div class="detail-task"><span class="detail-time">${t.time}</span><div class="detail-icon ${cat.cls}">${cat.ic}</div><div class="detail-desc"><span style="color:${catColor};font-family:monospace;font-size:9px;font-weight:700;letter-spacing:0.06em;display:block;margin-bottom:2px">${t.cat}</span>${t.desc}</div></div>`;
   }).join('');
   const dc=document.getElementById('detail-card');dc.style.display='block';
   dc.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -1134,8 +1134,8 @@ function renderTaskEditor() {
   list.innerHTML = tasks.map((t,i) => `
     <div style="background:#1E1E1E;border-radius:12px;padding:12px;margin-bottom:6px">
       <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
-        <input value="${t.time}" onchange="updateTask(${i},'time',this.value)" style="width:80px;background:#272727;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px 8px;font-family:'Space Mono',monospace;font-size:11px;color:#F0EDE8">
-        <select onchange="updateTask(${i},'cat',this.value)" style="flex:1;background:#272727;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px 8px;font-family:'Space Mono',monospace;font-size:10px;color:#F0EDE8">
+        <input value="${t.time}" onchange="updateTask(${i},'time',this.value)" style="width:80px;background:#272727;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px 8px;font-family:monospace;font-size:11px;color:#F0EDE8">
+        <select onchange="updateTask(${i},'cat',this.value)" style="flex:1;background:#272727;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px 8px;font-family:monospace;font-size:10px;color:#F0EDE8">
           ${CAT_OPTIONS.map(c=>`<option value="${c}" ${c===t.cat?'selected':''}>${c}</option>`).join('')}
         </select>
         <button onclick="removeTask(${i})" style="background:none;border:none;cursor:pointer;color:#5A5550;font-size:18px;padding:0 4px">×</button>
@@ -1272,8 +1272,8 @@ function renderNotes() {
   list.innerHTML = notes.map(n => `
     <div style="background:#1E1E1E;border-radius:14px;padding:16px;margin-bottom:8px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-        <span style="font-family:'Space Mono',monospace;font-size:9px;font-weight:700;background:#2A2710;color:#DCCE73;padding:3px 8px;border-radius:100px">DAY ${n.dayNum||'?'}</span>
-        <span style="font-family:'Space Mono',monospace;font-size:9px;color:#5A5550;flex:1">${n.date} · ${n.time}</span>
+        <span style="font-family:monospace;font-size:9px;font-weight:700;background:#2A2710;color:#DCCE73;padding:3px 8px;border-radius:100px">DAY ${n.dayNum||'?'}</span>
+        <span style="font-family:monospace;font-size:9px;color:#5A5550;flex:1">${n.date} · ${n.time}</span>
         <button onclick="deleteNote(${n.id})" style="background:none;border:none;cursor:pointer;font-size:14px;color:#5A5550;padding:0 4px" title="Delete">×</button>
       </div>
       <div style="font-size:14px;color:#F0EDE8;line-height:1.6;white-space:pre-wrap">${n.text}</div>
@@ -1365,7 +1365,7 @@ function saveCapture42(){if(captureType42==='commitment'){const t=document.getEl
 function renderOutcomeDays42(){const c=document.getElementById('outcome-days');if(!c)return;const i=selectedWeekIndex42(),start=weekStart42(i),w=ensureWeek42(i);c.innerHTML='';['mon','tue','wed','thu','fri','sat','sun'].forEach((dow,j)=>{const d=new Date(start);d.setDate(start.getDate()+j);const ds=date42(d),o=w.outcomes[dow],cs=commitmentsFor42(ds);c.innerHTML+=`<div class="outcome-day"><div class="outcome-top"><div class="outcome-dow">${dow.toUpperCase()}</div><div class="outcome-proj">${o.project}</div><div style="margin-left:auto;font-family:Space Mono;font-size:8px;color:var(--muted)">${d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'})}</div></div><div class="outcome-text">${o.title}</div><textarea class="outcome-edit" rows="2" onchange="saveOutcome42('${dow}','title',this.value)">${o.title}</textarea><input class="outcome-edit" value="${o.done.replace(/"/g,'&quot;')}" onchange="saveOutcome42('${dow}','done',this.value)"><div class="commit-list42">${cs.map(x=>`<div class="commit42"><div class="commit-time42">${x.time?formatTime42(x.time):'ANYTIME'}</div><div class="commit-title42">${esc42(x.title)}</div><button class="commit-del42" onclick="delCommitment42(${x.id})">×</button></div>`).join('')}</div><button class="add-commit42" onclick="openCommitment42('${ds}')">+ Add commitment</button></div>`});}
 function esc42(x){return String(x).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
 function formatTime42(t){if(!t)return'';let[h,m]=t.split(':').map(Number),ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+String(m).padStart(2,'0')+' '+ap}
-function renderToday42(){const t=document.getElementById('today-timeline42');if(!t)return;const now=new Date(),ds=date42(now),cs=commitmentsFor42(ds);t.innerHTML=cs.length?cs.map(c=>`<div class="timeline-item42"><div class="timeline-time42">${c.time?formatTime42(c.time):'ANYTIME'}</div><div class="timeline-title42">${esc42(c.title)}</div></div>`).join(''):'<button type="button" onclick="openCommitment42(date42(new Date()))" style="font:inherit;font-size:12px;color:var(--muted);padding:4px 2px 12px;border:0;background:none;cursor:pointer;text-align:left">No commitments today. <span style="color:var(--yellow);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.08em">+ Add commitment</span></button>';const nx=document.getElementById('next42');let tomorrow=new Date(now);tomorrow.setDate(now.getDate()+1);const po=outcomeForDate42(tomorrow),nc=commitmentsFor42(date42(tomorrow))[0];nx.innerHTML=`<div class="next-k42">Next · ${DAY_NAMES[tomorrow.getDay()]}</div><div class="next-t42">${po.title}</div><div class="next-s42">${po.project}${nc?' · Next commitment: '+(nc.time?formatTime42(nc.time)+' ':'')+esc42(nc.title):''}</div>`}
+function renderToday42(){const t=document.getElementById('today-timeline42');if(!t)return;const now=new Date(),ds=date42(now),cs=commitmentsFor42(ds);t.innerHTML=cs.length?cs.map(c=>`<div class="timeline-item42"><div class="timeline-time42">${c.time?formatTime42(c.time):'ANYTIME'}</div><div class="timeline-title42">${esc42(c.title)}</div></div>`).join(''):'<button type="button" onclick="openCommitment42(date42(new Date()))" style="font:inherit;font-size:12px;color:var(--muted);padding:4px 2px 12px;border:0;background:none;cursor:pointer;text-align:left">No commitments today. <span style="color:var(--yellow);font-family:monospace;text-transform:uppercase;letter-spacing:.08em">+ Add commitment</span></button>';const nx=document.getElementById('next42');let tomorrow=new Date(now);tomorrow.setDate(now.getDate()+1);const po=outcomeForDate42(tomorrow),nc=commitmentsFor42(date42(tomorrow))[0];nx.innerHTML=`<div class="next-k42">Next · ${DAY_NAMES[tomorrow.getDay()]}</div><div class="next-t42">${po.title}</div><div class="next-s42">${po.project}${nc?' · Next commitment: '+(nc.time?formatTime42(nc.time)+' ':'')+esc42(nc.title):''}</div>`}
 function openWeekFromStat43(){const b=document.getElementById('nb-week');showPanel('week',b);window.scrollTo({top:0,behavior:'smooth'})}
 function openSundayReview(){const i=selectedWeekIndex42(),prev=Math.max(0,i-1),prevStart=weekStart42(prev),dates=[0,1,2,3,4].map(j=>{const d=new Date(prevStart);d.setDate(prevStart.getDate()+j);return d}),done=dates.filter(d=>os.primaryDone[date42(d)]).length;document.getElementById('review-body42').innerHTML=`<div class="review-grid42"><div class="review-stat42"><b>${done}/5</b><span>Last week outcomes</span></div><div class="review-stat42"><b>${money(os.revenue.collected)}</b><span>90-day collected</span></div></div><label class="label42">What worked?</label><textarea class="field42" id="review-worked42" rows="2"></textarea><label class="label42">What drifted?</label><textarea class="field42" id="review-drift42" rows="2"></textarea><label class="label42">What changes next week?</label><textarea class="field42" id="review-change42" rows="2"></textarea><div style="font-size:11px;color:var(--muted);line-height:1.5;margin:8px 0 14px">Review the five primary outcomes behind this sheet before locking. Locking does not make the plan sacred; it makes changes visible.</div>`;document.getElementById('review-modal42').classList.add('open')}
 function closeReview42(){document.getElementById('review-modal42').classList.remove('open')}
@@ -1407,7 +1407,7 @@ function saveCloseDay43(){const modal=document.getElementById('close-day-modal43
 // Override v4.2 renderers with operational v4.3 versions.
 renderOutcomeDays42=function(){const c=document.getElementById('outcome-days');if(!c)return;const i=selectedWeekIndex42(),start=weekStart42(i),w=ensureWeek42(i);c.innerHTML='';['mon','tue','wed','thu','fri','sat','sun'].forEach((dow,j)=>{const d=new Date(start);d.setDate(start.getDate()+j);const ds=date42(d),o=w.outcomes[dow],cs=commitmentsFor42(ds);c.innerHTML+=`<div class="outcome-day"><div class="outcome-top"><div class="outcome-dow">${dow.toUpperCase()}</div><div class="outcome-proj">${o.project}</div><div style="margin-left:auto;font-family:Space Mono;font-size:8px;color:var(--muted)">${d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'})}</div></div><div class="outcome-text">${o.title}</div><textarea class="outcome-edit" rows="2" onchange="saveOutcome42('${dow}','title',this.value)">${o.title}</textarea><textarea class="outcome-edit" rows="2" onchange="saveOutcome42('${dow}','done',this.value)" aria-label="Done means">${o.done}</textarea><div class="commit-list42">${cs.map(x=>`<div class="commit42 ${x.completed?'done43':''}"><button class="check43 ${x.completed?'done':''}" onclick="toggleCommit43('${x.id}')">✓</button><div class="commit-time42">${x.time?formatTime42(x.time):'ANYTIME'}</div><div class="commit-title42">${esc42(x.title)}</div><div class="commit-actions43"><button class="icon-btn43" onclick="openEditCommit43('${x.id}')">•••</button></div></div>`).join('')}</div><button class="add-commit42" onclick="openCommitment42('${ds}')">+ Add item</button></div>`})};
 
-renderToday42=function(){const t=document.getElementById('today-timeline42');if(!t)return;const now=new Date(),ds=date42(now),cs=commitmentsFor42(ds),old=unfinishedBeforeToday43();let html='';html+=cs.length?cs.map(c=>`<div class="timeline-item42 ${c.completed?'done43':''}"><button class="check43 ${c.completed?'done':''}" onclick="toggleCommit43('${c.id}')">✓</button><div class="timeline-time42">${c.time?formatTime42(c.time):'ANYTIME'}</div><div class="timeline-title42">${esc42(c.title)}</div><button class="icon-btn43" onclick="openEditCommit43('${c.id}')">•••</button></div>`).join(''):'<button type="button" onclick="openCommitment42(date42(new Date()))" style="font:inherit;font-size:12px;color:var(--muted);padding:4px 2px 12px;border:0;background:none;cursor:pointer;text-align:left">No commitments today. <span style="color:var(--yellow);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.08em">+ Add commitment</span></button>';if(old.length){const latest=old[0].date;const ld=new Date(latest+'T12:00:00');const label=ld.toLocaleDateString('en-US',{weekday:'long'});html+=`<details class="carry43" style="margin-top:10px"><summary class="carry-label43" style="cursor:pointer;margin:0">${old.length} unfinished from ${label} / earlier · Review</summary><div style="margin-top:8px">${old.map(c=>`<div class="carry-row43"><span>${esc42(c.title)} · ${c.date}</span><button class="carry-btn43" onclick="carryForward43('${c.id}')">Carry forward</button><button class="icon-btn43" onclick="dismissCarry43('${c.id}')">×</button></div>`).join('')}</div></details>`}t.innerHTML=html;const nx=document.getElementById('next42');let tomorrow=new Date(now);tomorrow.setDate(now.getDate()+1);const po=outcomeForDate42(tomorrow),nc=commitmentsFor42(date42(tomorrow)).find(x=>!x.completed);nx.innerHTML=`<div class="next-k42">Next · ${DAY_NAMES[tomorrow.getDay()]}</div><div class="next-t42">${po.title}</div><div class="next-s42">${po.project}${nc?' · Next item: '+(nc.time?formatTime42(nc.time)+' ':'')+esc42(nc.title):''}</div>`;const b=document.getElementById('close-day43');if(b){const closed=os42.dayClosures[ds]?.closed;b.textContent=closed?'Day closed ✓':'Close day';b.classList.toggle('closed',!!closed)}};
+renderToday42=function(){const t=document.getElementById('today-timeline42');if(!t)return;const now=new Date(),ds=date42(now),cs=commitmentsFor42(ds),old=unfinishedBeforeToday43();let html='';html+=cs.length?cs.map(c=>`<div class="timeline-item42 ${c.completed?'done43':''}"><button class="check43 ${c.completed?'done':''}" onclick="toggleCommit43('${c.id}')">✓</button><div class="timeline-time42">${c.time?formatTime42(c.time):'ANYTIME'}</div><div class="timeline-title42">${esc42(c.title)}</div><button class="icon-btn43" onclick="openEditCommit43('${c.id}')">•••</button></div>`).join(''):'<button type="button" onclick="openCommitment42(date42(new Date()))" style="font:inherit;font-size:12px;color:var(--muted);padding:4px 2px 12px;border:0;background:none;cursor:pointer;text-align:left">No commitments today. <span style="color:var(--yellow);font-family:monospace;text-transform:uppercase;letter-spacing:.08em">+ Add commitment</span></button>';if(old.length){const latest=old[0].date;const ld=new Date(latest+'T12:00:00');const label=ld.toLocaleDateString('en-US',{weekday:'long'});html+=`<details class="carry43" style="margin-top:10px"><summary class="carry-label43" style="cursor:pointer;margin:0">${old.length} unfinished from ${label} / earlier · Review</summary><div style="margin-top:8px">${old.map(c=>`<div class="carry-row43"><span>${esc42(c.title)} · ${c.date}</span><button class="carry-btn43" onclick="carryForward43('${c.id}')">Carry forward</button><button class="icon-btn43" onclick="dismissCarry43('${c.id}')">×</button></div>`).join('')}</div></details>`}t.innerHTML=html;const nx=document.getElementById('next42');let tomorrow=new Date(now);tomorrow.setDate(now.getDate()+1);const po=outcomeForDate42(tomorrow),nc=commitmentsFor42(date42(tomorrow)).find(x=>!x.completed);nx.innerHTML=`<div class="next-k42">Next · ${DAY_NAMES[tomorrow.getDay()]}</div><div class="next-t42">${po.title}</div><div class="next-s42">${po.project}${nc?' · Next item: '+(nc.time?formatTime42(nc.time)+' ':'')+esc42(nc.title):''}</div>`;const b=document.getElementById('close-day43');if(b){const closed=os42.dayClosures[ds]?.closed;b.textContent=closed?'Day closed ✓':'Close day';b.classList.toggle('closed',!!closed)}};
 
 // Keep workout modal in sync when Train anchor is checked.
 const _toggleAnchor43=toggleAnchor;toggleAnchor=function(k){_toggleAnchor43(k);if(k==='workout'&&document.getElementById('workout-modal43').classList.contains('open'))renderWorkouts43();renderOS42()};
@@ -1636,9 +1636,15 @@ try{renderSettings()}catch(e){}
 // v4.9 weekly Big Rocks: weekly outcomes are separate from daily Primary Outcomes.
 (function(){
   function ensureStore49(){
-    if(!window.os42) return null;
-    if(!os42.bigRocks) os42.bigRocks={};
-    return os42.bigRocks;
+    // os42 is declared with `let` in the core app, so it is NOT a window property.
+    // Refer to the lexical variable directly; checking window.os42 made Add Big Rock a no-op.
+    try {
+      if(!os42.bigRocks) os42.bigRocks={};
+      return os42.bigRocks;
+    } catch(e) {
+      console.error('Big Rocks store unavailable', e);
+      return null;
+    }
   }
   function weekId49(){
     try{return wk42(currentWeekIndex42());}catch(e){return 'w01';}
@@ -1682,6 +1688,11 @@ try{renderSettings()}catch(e){}
   window.saveBigRocks49=function(){var r=rocks49();for(var i=r.length-1;i>=0;i--){if(!(r[i].text||'').trim())r.splice(i,1);else r[i].text=r[i].text.trim();}persist49();closeBigRocks49();};
   function esc49(v){return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function bind49(){
+    var addBtn=document.getElementById('bigrocks-add49');
+    if(addBtn){
+      addBtn.onclick=null;
+      addBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();addBigRock49();},false);
+    }
     var c=document.getElementById('outcomes-card43');if(c){
       c.onclick=null;
       c.addEventListener('click',openBigRocks49,false);
