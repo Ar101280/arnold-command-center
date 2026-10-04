@@ -1654,16 +1654,42 @@ try{renderSettings()}catch(e){}
     var k=weekId49(); if(!Array.isArray(store[k])) store[k]=[];
     return store[k];
   }
-  function persist49(){
-    try{localStorage.setItem(OS42K,JSON.stringify(os42)); if(window.sb) cloudSave(OS42K,os42);}catch(e){}
+  async function persist49(){
+    try{
+      localStorage.setItem(OS42K,JSON.stringify(os42));
+      // Big Rocks are shared operational state. Save directly to the same
+      // shared Supabase row used by explicit desktop/mobile sync.
+      if(!sb) initSupabase();
+      if(sb) await cloudSaveForUid45(OS42K,os42,SHARED_UID45);
+    }catch(e){ console.error('Big Rocks cloud save failed',e); }
     renderBigRocksStat49();
+  }
+  async function hydrateBigRocks49(){
+    try{
+      if(!sb) initSupabase();
+      if(!sb) return false;
+      var cloud=await cloudLoadForUid45(OS42K,SHARED_UID45);
+      if(!cloud) return false;
+      // Hydrate the full v42 operational store so mobile and desktop stay on
+      // one source of truth, while preserving defaults required by the UI.
+      os42=Object.assign({weeks:{},commitments:[],locks:{},reviewNotes:{},drifts:[],revenueLog:[],dayClosures:{},bigRocks:{}},cloud);
+      if(!os42.bigRocks) os42.bigRocks={};
+      if(!Array.isArray(os42.commitments)) os42.commitments=[];
+      if(!Array.isArray(os42.revenueLog)) os42.revenueLog=[];
+      if(!os42.dayClosures) os42.dayClosures={};
+      localStorage.setItem(OS42K,JSON.stringify(os42));
+      return true;
+    }catch(e){ console.error('Big Rocks cloud hydrate failed',e); return false; }
   }
   window.renderBigRocksStat49=function(){
     var r=rocks49(), done=r.filter(function(x){return !!x.done}).length;
     var stat=document.getElementById('outcomes-stat'); if(stat) stat.textContent=done+'/5';
   };
-  window.openBigRocks49=function(e){
+  window.openBigRocks49=async function(e){
     if(e){e.preventDefault();e.stopPropagation();}
+    // Pull the shared v42 store before rendering. This makes opening Big Rocks
+    // on phone immediately reflect edits/checkoffs made on desktop and vice versa.
+    await hydrateBigRocks49();
     renderBigRocks49();
     var m=document.getElementById('bigrocks-modal49'); if(m)m.classList.add('open');
   };
@@ -1685,7 +1711,7 @@ try{renderSettings()}catch(e){}
     var add=document.getElementById('bigrocks-add49');if(add){add.disabled=r.length>=5;add.style.opacity=r.length>=5?'.35':'1';}
   };
   window.addBigRock49=function(){var r=rocks49();if(r.length>=5)return;r.push({id:'br'+Date.now(),text:'',done:false});persist49();renderBigRocks49();setTimeout(function(){var a=document.querySelectorAll('.bigrock-input49');if(a.length)a[a.length-1].focus();},0);};
-  window.saveBigRocks49=function(){var r=rocks49();for(var i=r.length-1;i>=0;i--){if(!(r[i].text||'').trim())r.splice(i,1);else r[i].text=r[i].text.trim();}persist49();closeBigRocks49();};
+  window.saveBigRocks49=async function(){var r=rocks49();for(var i=r.length-1;i>=0;i--){if(!(r[i].text||'').trim())r.splice(i,1);else r[i].text=r[i].text.trim();}await persist49();closeBigRocks49();};
   function esc49(v){return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function bind49(){
     var addBtn=document.getElementById('bigrocks-add49');
