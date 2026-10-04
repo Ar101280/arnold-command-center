@@ -1452,7 +1452,22 @@ async function cloudLoadForUid45(key, uid){
 }
 async function cloudSaveForUid45(key,value,uid){
   if(!sb||!uid)return false;
-  try{const {error}=await sb.from('ar_data').upsert({uid,key,value:JSON.stringify(value),updated_at:new Date().toISOString()},{onConflict:'uid,key'});return !error}catch(e){return false}
+  try{
+    const payload={value:JSON.stringify(value),updated_at:new Date().toISOString()};
+    // Do not rely on PostgREST upsert/onConflict here. Older versions assumed
+    // a composite UNIQUE(uid,key) constraint that this table may not have.
+    const {data:existing,error:readErr}=await sb.from('ar_data')
+      .select('uid,key').eq('uid',uid).eq('key',key).limit(1);
+    if(readErr){console.error('cloudSaveForUid45 read failed',readErr);return false;}
+    if(existing&&existing.length){
+      const {error:updateErr}=await sb.from('ar_data').update(payload).eq('uid',uid).eq('key',key);
+      if(updateErr){console.error('cloudSaveForUid45 update failed',updateErr);return false;}
+      return true;
+    }
+    const {error:insertErr}=await sb.from('ar_data').insert({uid,key,...payload});
+    if(insertErr){console.error('cloudSaveForUid45 insert failed',insertErr);return false;}
+    return true;
+  }catch(e){console.error('cloudSaveForUid45 exception',e);return false}
 }
 function substantive45(key,v){
   if(!v)return false;
@@ -1656,6 +1671,8 @@ try{renderSettings()}catch(e){}
     localStorage.setItem(BRK,JSON.stringify(brState));
     let ok=false;
     try{if(await ensureCloud())ok=await cloudSaveForUid45(BRK,brState,SHARED_UID45);}catch(e){console.error('Big Rocks push failed',e)}
+    const c=document.getElementById('bigrocks-count49');
+    if(c&&!ok)c.textContent='NOT SYNCED · SAVED ON THIS DEVICE';
     renderStat(); return ok;
   }
   function renderStat(){const r=rocks(),d=r.filter(x=>!!x.done).length;const el=document.getElementById('outcomes-stat');if(el)el.textContent=d+'/5';}
