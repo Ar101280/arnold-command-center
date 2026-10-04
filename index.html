@@ -1626,5 +1626,40 @@ renderSettings=function(){
 };
 try{renderSettings()}catch(e){}
 </script>
+
+<script>
+// v4.8 navigation hotfix: make Week stat cards use explicit event listeners.
+(function(){
+  function goToWeek48(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); }
+    try {
+      document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+      var week=document.getElementById('panel-week');
+      if(week) week.classList.add('active');
+      ['today','week','ninety','notes','settings'].forEach(function(n){
+        var b=document.getElementById('nb-'+n);
+        if(b) b.style.color=(n==='week')?'#DCCE73':'#5A5550';
+      });
+      if(typeof renderOS42==='function') renderOS42();
+      window.scrollTo(0,0);
+    } catch(err) { console.error('Week navigation failed',err); }
+  }
+  function bind48(){
+    ['integrity-card43','outcomes-card43'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(!el) return;
+      el.onclick=null;
+      el.setAttribute('role','button');
+      el.setAttribute('tabindex','0');
+      el.addEventListener('click',goToWeek48,false);
+      el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){goToWeek48(e);}},false);
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind48);
+  else bind48();
+  window.goToWeek48=goToWeek48;
+})();
+</script>
+
 </body>
 </html>
