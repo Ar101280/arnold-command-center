@@ -1633,101 +1633,56 @@ try{renderSettings()}catch(e){}
 </script>
 
 <script>
-// v4.9 weekly Big Rocks: weekly outcomes are separate from daily Primary Outcomes.
+// v5.0 Weekly Big Rocks: isolated cloud document to prevent the larger
+// operational store from overwriting weekly outcomes across devices.
 (function(){
-  function ensureStore49(){
-    // os42 is declared with `let` in the core app, so it is NOT a window property.
-    // Refer to the lexical variable directly; checking window.os42 made Add Big Rock a no-op.
-    try {
-      if(!os42.bigRocks) os42.bigRocks={};
-      return os42.bigRocks;
-    } catch(e) {
-      console.error('Big Rocks store unavailable', e);
-      return null;
-    }
+  const BRK='ar_big_rocks_v1';
+  let brState={weeks:{}};
+  function loadLocal(){
+    try{const x=JSON.parse(localStorage.getItem(BRK)||'null');if(x&&x.weeks)brState=x;}catch(e){}
   }
-  function weekId49(){
-    try{return wk42(currentWeekIndex42());}catch(e){return 'w01';}
-  }
-  function rocks49(){
-    var store=ensureStore49(); if(!store) return [];
-    var k=weekId49(); if(!Array.isArray(store[k])) store[k]=[];
-    return store[k];
-  }
-  async function persist49(){
+  function weekId(){try{return wk42(currentWeekIndex42());}catch(e){return 'w01';}}
+  function rocks(){const k=weekId();if(!Array.isArray(brState.weeks[k]))brState.weeks[k]=[];return brState.weeks[k];}
+  async function ensureCloud(){if(!sb) initSupabase();return !!sb;}
+  async function pull(){
     try{
-      localStorage.setItem(OS42K,JSON.stringify(os42));
-      // Big Rocks are shared operational state. Save directly to the same
-      // shared Supabase row used by explicit desktop/mobile sync.
-      if(!sb) initSupabase();
-      if(sb) await cloudSaveForUid45(OS42K,os42,SHARED_UID45);
-    }catch(e){ console.error('Big Rocks cloud save failed',e); }
-    renderBigRocksStat49();
+      if(!(await ensureCloud())) return false;
+      const cloud=await cloudLoadForUid45(BRK,SHARED_UID45);
+      if(cloud&&cloud.weeks){brState=cloud;localStorage.setItem(BRK,JSON.stringify(brState));return true;}
+    }catch(e){console.error('Big Rocks pull failed',e)}
+    return false;
   }
-  async function hydrateBigRocks49(){
-    try{
-      if(!sb) initSupabase();
-      if(!sb) return false;
-      var cloud=await cloudLoadForUid45(OS42K,SHARED_UID45);
-      if(!cloud) return false;
-      // Hydrate the full v42 operational store so mobile and desktop stay on
-      // one source of truth, while preserving defaults required by the UI.
-      os42=Object.assign({weeks:{},commitments:[],locks:{},reviewNotes:{},drifts:[],revenueLog:[],dayClosures:{},bigRocks:{}},cloud);
-      if(!os42.bigRocks) os42.bigRocks={};
-      if(!Array.isArray(os42.commitments)) os42.commitments=[];
-      if(!Array.isArray(os42.revenueLog)) os42.revenueLog=[];
-      if(!os42.dayClosures) os42.dayClosures={};
-      localStorage.setItem(OS42K,JSON.stringify(os42));
-      return true;
-    }catch(e){ console.error('Big Rocks cloud hydrate failed',e); return false; }
+  async function push(){
+    localStorage.setItem(BRK,JSON.stringify(brState));
+    let ok=false;
+    try{if(await ensureCloud())ok=await cloudSaveForUid45(BRK,brState,SHARED_UID45);}catch(e){console.error('Big Rocks push failed',e)}
+    renderStat(); return ok;
   }
-  window.renderBigRocksStat49=function(){
-    var r=rocks49(), done=r.filter(function(x){return !!x.done}).length;
-    var stat=document.getElementById('outcomes-stat'); if(stat) stat.textContent=done+'/5';
-  };
-  window.openBigRocks49=async function(e){
-    if(e){e.preventDefault();e.stopPropagation();}
-    // Pull the shared v42 store before rendering. This makes opening Big Rocks
-    // on phone immediately reflect edits/checkoffs made on desktop and vice versa.
-    await hydrateBigRocks49();
-    renderBigRocks49();
-    var m=document.getElementById('bigrocks-modal49'); if(m)m.classList.add('open');
-  };
-  window.closeBigRocks49=function(){var m=document.getElementById('bigrocks-modal49');if(m)m.classList.remove('open');};
-  window.renderBigRocks49=function(){
-    var r=rocks49(), list=document.getElementById('bigrocks-list49'); if(!list)return;
-    list.innerHTML='';
-    r.forEach(function(x,i){
-      var row=document.createElement('div'); row.className='bigrock49'+(x.done?' done':'');
-      row.innerHTML='<button class="bigrock-check49 '+(x.done?'done':'')+'" aria-label="Mark big rock complete">'+(x.done?'✓':'○')+'</button><input class="bigrock-input49" maxlength="180" placeholder="What must be true by week end?" value="'+esc49(x.text||'')+'"><button class="bigrock-del49" aria-label="Delete big rock">×</button>';
-      row.querySelector('.bigrock-check49').addEventListener('click',function(){r[i].done=!r[i].done;persist49();renderBigRocks49();});
-      row.querySelector('.bigrock-input49').addEventListener('input',function(ev){r[i].text=ev.target.value;});
-      row.querySelector('.bigrock-input49').addEventListener('change',persist49);
-      row.querySelector('.bigrock-del49').addEventListener('click',function(){r.splice(i,1);persist49();renderBigRocks49();});
-      list.appendChild(row);
+  function renderStat(){const r=rocks(),d=r.filter(x=>!!x.done).length;const el=document.getElementById('outcomes-stat');if(el)el.textContent=d+'/5';}
+  function esc(v){return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function render(){
+    const r=rocks(),list=document.getElementById('bigrocks-list49');if(!list)return;list.innerHTML='';
+    r.forEach((x,i)=>{
+      const row=document.createElement('div');row.className='bigrock49'+(x.done?' done':'');
+      row.innerHTML='<button class="bigrock-check49 '+(x.done?'done':'')+'" aria-label="Mark big rock complete">'+(x.done?'✓':'○')+'</button><input class="bigrock-input49" maxlength="180" placeholder="What must be true by week end?" value="'+esc(x.text||'')+'"><button class="bigrock-del49" aria-label="Delete big rock">×</button>';
+      row.querySelector('.bigrock-check49').addEventListener('click',async()=>{r[i].done=!r[i].done;await push();render();});
+      const input=row.querySelector('.bigrock-input49');input.addEventListener('input',e=>{r[i].text=e.target.value;localStorage.setItem(BRK,JSON.stringify(brState));});input.addEventListener('change',push);
+      row.querySelector('.bigrock-del49').addEventListener('click',async()=>{r.splice(i,1);await push();render();});list.appendChild(row);
     });
-    var done=r.filter(function(x){return !!x.done}).length;
-    var count=document.getElementById('bigrocks-count49');if(count)count.textContent=done+'/5 COMPLETE';
-    var add=document.getElementById('bigrocks-add49');if(add){add.disabled=r.length>=5;add.style.opacity=r.length>=5?'.35':'1';}
-  };
-  window.addBigRock49=function(){var r=rocks49();if(r.length>=5)return;r.push({id:'br'+Date.now(),text:'',done:false});persist49();renderBigRocks49();setTimeout(function(){var a=document.querySelectorAll('.bigrock-input49');if(a.length)a[a.length-1].focus();},0);};
-  window.saveBigRocks49=async function(){var r=rocks49();for(var i=r.length-1;i>=0;i--){if(!(r[i].text||'').trim())r.splice(i,1);else r[i].text=r[i].text.trim();}await persist49();closeBigRocks49();};
-  function esc49(v){return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-  function bind49(){
-    var addBtn=document.getElementById('bigrocks-add49');
-    if(addBtn){
-      addBtn.onclick=null;
-      addBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();addBigRock49();},false);
-    }
-    var c=document.getElementById('outcomes-card43');if(c){
-      c.onclick=null;
-      c.addEventListener('click',openBigRocks49,false);
-      c.addEventListener('touchend',function(e){e.preventDefault();openBigRocks49(e);},{passive:false});
-    }
-    renderBigRocksStat49();
+    const d=r.filter(x=>!!x.done).length,c=document.getElementById('bigrocks-count49');if(c)c.textContent=d+'/5 COMPLETE';
+    const add=document.getElementById('bigrocks-add49');if(add){add.disabled=r.length>=5;add.style.opacity=r.length>=5?'.35':'1';}renderStat();
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind49);else bind49();
-  var oldRender=window.renderOS; if(typeof oldRender==='function') window.renderOS=function(){oldRender.apply(this,arguments);renderBigRocksStat49();};
+  window.openBigRocks49=async function(e){if(e){e.preventDefault();e.stopPropagation();}await pull();render();const m=document.getElementById('bigrocks-modal49');if(m)m.classList.add('open');};
+  window.closeBigRocks49=function(){const m=document.getElementById('bigrocks-modal49');if(m)m.classList.remove('open');};
+  window.addBigRock49=async function(){const r=rocks();if(r.length>=5)return;r.push({id:'br'+Date.now(),text:'',done:false});await push();render();setTimeout(()=>{const a=document.querySelectorAll('.bigrock-input49');if(a.length)a[a.length-1].focus();},0);};
+  window.saveBigRocks49=async function(){const r=rocks();for(let i=r.length-1;i>=0;i--){if(!(r[i].text||'').trim())r.splice(i,1);else r[i].text=r[i].text.trim();}await push();closeBigRocks49();};
+  function bind(){
+    loadLocal();
+    const add=document.getElementById('bigrocks-add49');if(add){add.onclick=null;add.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();addBigRock49();});}
+    const card=document.getElementById('outcomes-card43');if(card){card.onclick=null;card.addEventListener('click',openBigRocks49);}
+    renderStat();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
 })();
 </script>
 
