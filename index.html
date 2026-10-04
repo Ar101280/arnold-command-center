@@ -469,6 +469,10 @@ button:active{transform:scale(.96);}
 .log-list43{display:flex;flex-direction:column;gap:6px;margin:10px 0 16px}.log-row43{display:flex;align-items:center;gap:9px;background:var(--surface2);border-radius:11px;padding:10px}.log-main43{flex:1}.log-title43{font-size:12px}.log-sub43{font-family:'Space Mono';font-size:8px;color:var(--muted);margin-top:3px}.money43{font-family:'Space Mono';font-weight:700;color:var(--green)}.mini-grid43{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:12px 0}.mini43{background:var(--surface2);border-radius:12px;padding:10px}.mini43 b{font-family:'Space Mono';font-size:18px;display:block}.mini43 span{font-family:'Space Mono';font-size:7px;color:var(--muted);text-transform:uppercase}.danger43{color:#D97878!important}.outcome-edit{white-space:normal;overflow-wrap:anywhere;resize:vertical;min-height:42px}.commit-title42,.timeline-title42{overflow-wrap:anywhere}.fab42{bottom:88px}
 @media(max-width:520px){.timeline-item42{grid-template-columns:26px 52px 1fr auto}.commit-time42{min-width:46px}.row42{grid-template-columns:1fr}.mini-grid43{grid-template-columns:1fr 1fr 1fr}}
 
+
+/* ── V4.9 WEEKLY BIG ROCKS ── */
+.bigrocks49{display:flex;flex-direction:column;gap:8px;margin:14px 0 18px}.bigrock49{display:grid;grid-template-columns:32px 1fr auto;gap:10px;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:10px}.bigrock-check49{width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);background:transparent;color:transparent;display:grid;place-items:center;cursor:pointer;font-size:13px}.bigrock-check49.done{background:var(--green);border-color:var(--green);color:#07110c}.bigrock-input49{width:100%;border:0;background:transparent;color:var(--text);font-size:14px;outline:none;line-height:1.35}.bigrock49.done .bigrock-input49{text-decoration:line-through;opacity:.5}.bigrock-del49{border:0;background:none;color:var(--muted);font-size:17px;padding:6px;cursor:pointer}.bigrock-add49{width:100%;border:1px dashed var(--border2);background:transparent;color:var(--yellow);border-radius:12px;padding:11px;font-family:'Space Mono';font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}.bigrock-meta49{font-family:'Space Mono';font-size:8px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:4px}.bigrock-full49{font-size:11px;color:var(--muted);line-height:1.5;margin:4px 0 10px}.stat-card.action43{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+
 </style>
 </head>
 <body>
@@ -490,7 +494,7 @@ button:active{transform:scale(.96);}
     <div class="os-kicker">Week at a glance</div>
     <div class="stats-grid">
       <div class="stat-card action43" id="integrity-card43" onclick="openWeekFromStat43()"><div class="stat-num yellow" id="integrity-stat">0%</div><div class="stat-lbl">Plan integrity · tap to view</div></div>
-      <div class="stat-card action43" id="outcomes-card43" onclick="openWeekFromStat43()"><div class="stat-num" id="outcomes-stat">0/5</div><div class="stat-lbl">Primary outcomes · tap to view</div></div>
+      <div class="stat-card action43" id="outcomes-card43" onclick="openBigRocks49()"><div class="stat-num" id="outcomes-stat">0/5</div><div class="stat-lbl">Weekly big rocks · tap to view</div></div>
       <div class="stat-card action43" id="revenue-card43" onclick="openRevenue43()"><div class="stat-num green" id="revenue-stat">$0</div><div class="stat-lbl">90-day collected · tap to log</div></div>
       <div class="stat-card action43" id="workout-card43" onclick="openWorkouts43()"><div class="stat-num" id="workout-stat">0/3</div><div class="stat-lbl">Workouts · tap to log</div></div>
     </div>
@@ -574,6 +578,7 @@ button:active{transform:scale(.96);}
 <button class="fab42" onclick="openCapture42()" aria-label="Quick capture">+</button>
 <div class="modal42" id="capture-modal42" onclick="if(event.target===this)closeCapture42()"><div class="sheet42"><div class="sheet-title42" id="capture-title42">QUICK CAPTURE</div><div class="seg42" id="capture-seg42"><button class="active" onclick="setCaptureType42('commitment',this)">Commitment</button><button onclick="setCaptureType42('idea',this)">Idea</button><button onclick="setCaptureType42('note',this)">Note</button></div><div id="capture-fields42"></div><button class="save42" onclick="saveCapture42()">Save</button><button class="cancel42" onclick="closeCapture42()">Cancel</button></div></div>
 <div class="modal42" id="review-modal42" onclick="if(event.target===this)closeReview42()"><div class="sheet42"><div class="sheet-title42">SUNDAY REVIEW</div><div id="review-body42"></div><button class="save42" onclick="lockSelectedWeek42()">Lock this week</button><button class="cancel42" onclick="closeReview42()">Cancel</button></div></div>
+<div class="modal42" id="bigrocks-modal49" onclick="if(event.target===this)closeBigRocks49()"><div class="sheet42"><div class="sheet-title42">THIS WEEK'S BIG ROCKS</div><div class="bigrock-meta49" id="bigrocks-count49">0/5 COMPLETE</div><div class="bigrock-full49">Choose up to five outcomes that must be true by the end of this week. Daily Primary Outcomes should move these forward.</div><div class="bigrocks49" id="bigrocks-list49"></div><button class="bigrock-add49" id="bigrocks-add49" onclick="addBigRock49()">+ Add big rock</button><button class="save42" style="margin-top:12px" onclick="saveBigRocks49()">Done</button><button class="cancel42" onclick="closeBigRocks49()">Cancel</button></div></div>
 <div class="modal42" id="edit-commit43" onclick="if(event.target===this)closeEditCommit43()"><div class="sheet42"><div class="sheet-title42">EDIT ITEM</div><div id="edit-commit-body43"></div><button class="save42" onclick="saveEditCommit43()">Save changes</button><button class="cancel42 danger43" onclick="deleteEditCommit43()">Delete item</button><button class="cancel42" onclick="closeEditCommit43()">Cancel</button></div></div>
 <div class="modal42" id="workout-modal43" onclick="if(event.target===this)closeModal43('workout-modal43')"><div class="sheet42"><div class="sheet-title42">WORKOUTS</div><div id="workout-body43"></div><button class="cancel42" onclick="closeModal43('workout-modal43')">Done</button></div></div>
 <div class="modal42" id="revenue-modal43" onclick="if(event.target===this)closeModal43('revenue-modal43')"><div class="sheet42"><div class="sheet-title42">REVENUE</div><div id="revenue-body43"></div><button class="cancel42" onclick="closeModal43('revenue-modal43')">Done</button></div></div>
@@ -1628,6 +1633,68 @@ try{renderSettings()}catch(e){}
 </script>
 
 <script>
+// v4.9 weekly Big Rocks: weekly outcomes are separate from daily Primary Outcomes.
+(function(){
+  function ensureStore49(){
+    if(!window.os42) return null;
+    if(!os42.bigRocks) os42.bigRocks={};
+    return os42.bigRocks;
+  }
+  function weekId49(){
+    try{return wk42(currentWeekIndex42());}catch(e){return 'w01';}
+  }
+  function rocks49(){
+    var store=ensureStore49(); if(!store) return [];
+    var k=weekId49(); if(!Array.isArray(store[k])) store[k]=[];
+    return store[k];
+  }
+  function persist49(){
+    try{localStorage.setItem(OS42K,JSON.stringify(os42)); if(window.sb) cloudSave(OS42K,os42);}catch(e){}
+    renderBigRocksStat49();
+  }
+  window.renderBigRocksStat49=function(){
+    var r=rocks49(), done=r.filter(function(x){return !!x.done}).length;
+    var stat=document.getElementById('outcomes-stat'); if(stat) stat.textContent=done+'/5';
+  };
+  window.openBigRocks49=function(e){
+    if(e){e.preventDefault();e.stopPropagation();}
+    renderBigRocks49();
+    var m=document.getElementById('bigrocks-modal49'); if(m)m.classList.add('open');
+  };
+  window.closeBigRocks49=function(){var m=document.getElementById('bigrocks-modal49');if(m)m.classList.remove('open');};
+  window.renderBigRocks49=function(){
+    var r=rocks49(), list=document.getElementById('bigrocks-list49'); if(!list)return;
+    list.innerHTML='';
+    r.forEach(function(x,i){
+      var row=document.createElement('div'); row.className='bigrock49'+(x.done?' done':'');
+      row.innerHTML='<button class="bigrock-check49 '+(x.done?'done':'')+'" aria-label="Mark big rock complete">'+(x.done?'✓':'○')+'</button><input class="bigrock-input49" maxlength="180" placeholder="What must be true by week end?" value="'+esc49(x.text||'')+'"><button class="bigrock-del49" aria-label="Delete big rock">×</button>';
+      row.querySelector('.bigrock-check49').addEventListener('click',function(){r[i].done=!r[i].done;persist49();renderBigRocks49();});
+      row.querySelector('.bigrock-input49').addEventListener('input',function(ev){r[i].text=ev.target.value;});
+      row.querySelector('.bigrock-input49').addEventListener('change',persist49);
+      row.querySelector('.bigrock-del49').addEventListener('click',function(){r.splice(i,1);persist49();renderBigRocks49();});
+      list.appendChild(row);
+    });
+    var done=r.filter(function(x){return !!x.done}).length;
+    var count=document.getElementById('bigrocks-count49');if(count)count.textContent=done+'/5 COMPLETE';
+    var add=document.getElementById('bigrocks-add49');if(add){add.disabled=r.length>=5;add.style.opacity=r.length>=5?'.35':'1';}
+  };
+  window.addBigRock49=function(){var r=rocks49();if(r.length>=5)return;r.push({id:'br'+Date.now(),text:'',done:false});persist49();renderBigRocks49();setTimeout(function(){var a=document.querySelectorAll('.bigrock-input49');if(a.length)a[a.length-1].focus();},0);};
+  window.saveBigRocks49=function(){var r=rocks49();for(var i=r.length-1;i>=0;i--){if(!(r[i].text||'').trim())r.splice(i,1);else r[i].text=r[i].text.trim();}persist49();closeBigRocks49();};
+  function esc49(v){return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function bind49(){
+    var c=document.getElementById('outcomes-card43');if(c){
+      c.onclick=null;
+      c.addEventListener('click',openBigRocks49,false);
+      c.addEventListener('touchend',function(e){e.preventDefault();openBigRocks49(e);},{passive:false});
+    }
+    renderBigRocksStat49();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind49);else bind49();
+  var oldRender=window.renderOS; if(typeof oldRender==='function') window.renderOS=function(){oldRender.apply(this,arguments);renderBigRocksStat49();};
+})();
+</script>
+
+<script>
 // v4.8 navigation hotfix: make Week stat cards use explicit event listeners.
 (function(){
   function goToWeek48(e){
@@ -1645,7 +1712,7 @@ try{renderSettings()}catch(e){}
     } catch(err) { console.error('Week navigation failed',err); }
   }
   function bind48(){
-    ['integrity-card43','outcomes-card43'].forEach(function(id){
+    ['integrity-card43'].forEach(function(id){
       var el=document.getElementById(id);
       if(!el) return;
       el.onclick=null;
