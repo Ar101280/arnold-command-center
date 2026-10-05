@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>AR — Command Center</title>
+<title>AR — Command Center v5.1</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
@@ -1648,34 +1648,47 @@ try{renderSettings()}catch(e){}
 </script>
 
 <script>
-// v5.0 Weekly Big Rocks: isolated cloud document to prevent the larger
-// operational store from overwriting weekly outcomes across devices.
+// v5.1 Weekly Big Rocks — cloud-first cross-device sync.
 (function(){
   const BRK='ar_big_rocks_v1';
   let brState={weeks:{}};
-  function loadLocal(){
-    try{const x=JSON.parse(localStorage.getItem(BRK)||'null');if(x&&x.weeks)brState=x;}catch(e){}
+  let activeWeekKey=null;
+  function loadLocal(){try{const x=JSON.parse(localStorage.getItem(BRK)||'null');if(x&&x.weeks)brState=x;}catch(e){}}
+  function computedWeekId(){try{return wk42(currentWeekIndex42());}catch(e){return 'w01';}}
+  function chooseWeekKey(state){
+    const wanted=computedWeekId();
+    if(state&&state.weeks&&Array.isArray(state.weeks[wanted])&&state.weeks[wanted].length) return wanted;
+    // Cross-device safety: if a device computes a neighboring week differently,
+    // use the newest populated cloud week rather than showing an empty modal.
+    const keys=state&&state.weeks?Object.keys(state.weeks).filter(k=>Array.isArray(state.weeks[k])&&state.weeks[k].length).sort():[];
+    return keys.length?keys[keys.length-1]:wanted;
   }
-  function weekId(){try{return wk42(currentWeekIndex42());}catch(e){return 'w01';}}
-  function rocks(){const k=weekId();if(!Array.isArray(brState.weeks[k]))brState.weeks[k]=[];return brState.weeks[k];}
+  function weekId(){return activeWeekKey||computedWeekId();}
+  function rocks(){const k=weekId();if(!brState.weeks)brState.weeks={};if(!Array.isArray(brState.weeks[k]))brState.weeks[k]=[];return brState.weeks[k];}
+  function status(msg,bad=false){const el=document.getElementById('bigrocks-sync51');if(el){el.textContent=msg;el.style.color=bad?'#F08070':'#62D9B5';}}
   async function ensureCloud(){if(!sb) initSupabase();return !!sb;}
   async function pull(){
+    status('SYNCING FROM CLOUD…');
     try{
-      if(!(await ensureCloud())) return false;
-      const cloud=await cloudLoadForUid45(BRK,SHARED_UID45);
-      if(cloud&&cloud.weeks){brState=cloud;localStorage.setItem(BRK,JSON.stringify(brState));return true;}
-    }catch(e){console.error('Big Rocks pull failed',e)}
-    return false;
+      if(!(await ensureCloud())){status('CLOUD NOT CONNECTED',true);return false;}
+      const {data,error}=await sb.from('ar_data').select('value,updated_at').eq('uid',SHARED_UID45).eq('key',BRK).order('updated_at',{ascending:false}).limit(1);
+      if(error){console.error('Big Rocks cloud read error',error);status('CLOUD READ FAILED · '+(error.message||'UNKNOWN ERROR'),true);return false;}
+      if(data&&data.length){
+        let cloud=data[0].value; if(typeof cloud==='string') cloud=JSON.parse(cloud);
+        if(cloud&&cloud.weeks){brState=cloud;activeWeekKey=chooseWeekKey(brState);localStorage.setItem(BRK,JSON.stringify(brState));status('CLOUD SYNCED ✓');return true;}
+      }
+      activeWeekKey=computedWeekId();status('NO BIG ROCKS IN CLOUD',true);return false;
+    }catch(e){console.error('Big Rocks pull failed',e);status('CLOUD READ FAILED · '+(e.message||'UNKNOWN ERROR'),true);return false;}
   }
   async function push(){
-    localStorage.setItem(BRK,JSON.stringify(brState));
-    let ok=false;
-    try{if(await ensureCloud())ok=await cloudSaveForUid45(BRK,brState,SHARED_UID45);}catch(e){console.error('Big Rocks push failed',e)}
-    const c=document.getElementById('bigrocks-count49');
-    if(c&&!ok)c.textContent='NOT SYNCED · SAVED ON THIS DEVICE';
-    renderStat(); return ok;
+    localStorage.setItem(BRK,JSON.stringify(brState));status('SAVING…');
+    try{
+      if(!(await ensureCloud())){status('SAVED HERE · CLOUD NOT CONNECTED',true);renderStat();return false;}
+      const ok=await cloudSaveForUid45(BRK,brState,SHARED_UID45);
+      status(ok?'SAVED TO CLOUD ✓':'SAVED HERE · CLOUD SAVE FAILED',!ok);renderStat();return ok;
+    }catch(e){console.error('Big Rocks push failed',e);status('SAVED HERE · CLOUD SAVE FAILED',true);renderStat();return false;}
   }
-  function renderStat(){const r=rocks(),d=r.filter(x=>!!x.done).length;const el=document.getElementById('outcomes-stat');if(el)el.textContent=d+'/5';}
+  function renderStat(){const k=chooseWeekKey(brState);const r=(brState.weeks&&Array.isArray(brState.weeks[k]))?brState.weeks[k]:[];const d=r.filter(x=>!!x.done).length;const el=document.getElementById('outcomes-stat');if(el)el.textContent=d+'/5';}
   function esc(v){return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function render(){
     const r=rocks(),list=document.getElementById('bigrocks-list49');if(!list)return;list.innerHTML='';
@@ -1689,14 +1702,19 @@ try{renderSettings()}catch(e){}
     const d=r.filter(x=>!!x.done).length,c=document.getElementById('bigrocks-count49');if(c)c.textContent=d+'/5 COMPLETE';
     const add=document.getElementById('bigrocks-add49');if(add){add.disabled=r.length>=5;add.style.opacity=r.length>=5?'.35':'1';}renderStat();
   }
-  window.openBigRocks49=async function(e){if(e){e.preventDefault();e.stopPropagation();}await pull();render();const m=document.getElementById('bigrocks-modal49');if(m)m.classList.add('open');};
+  window.openBigRocks49=async function(e){if(e){e.preventDefault();e.stopPropagation();}const m=document.getElementById('bigrocks-modal49');if(m)m.classList.add('open');await pull();render();};
   window.closeBigRocks49=function(){const m=document.getElementById('bigrocks-modal49');if(m)m.classList.remove('open');};
-  window.addBigRock49=async function(){const r=rocks();if(r.length>=5)return;r.push({id:'br'+Date.now(),text:'',done:false});await push();render();setTimeout(()=>{const a=document.querySelectorAll('.bigrock-input49');if(a.length)a[a.length-1].focus();},0);};
+  window.addBigRock49=async function(){const r=rocks();if(r.length>=5)return;r.push({id:'br'+Date.now(),text:'',done:false});render();setTimeout(()=>{const a=document.querySelectorAll('.bigrock-input49');if(a.length)a[a.length-1].focus();},0);};
   window.saveBigRocks49=async function(){const r=rocks();for(let i=r.length-1;i>=0;i--){if(!(r[i].text||'').trim())r.splice(i,1);else r[i].text=r[i].text.trim();}await push();closeBigRocks49();};
+  window.retryBigRocks51=async function(){await pull();render();};
   function bind(){
-    loadLocal();
+    loadLocal();activeWeekKey=chooseWeekKey(brState);
     const add=document.getElementById('bigrocks-add49');if(add){add.onclick=null;add.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();addBigRock49();});}
     const card=document.getElementById('outcomes-card43');if(card){card.onclick=null;card.addEventListener('click',openBigRocks49);}
+    const list=document.getElementById('bigrocks-list49');if(list&&list.parentNode&&!document.getElementById('bigrocks-sync51')){
+      const st=document.createElement('div');st.id='bigrocks-sync51';st.style.cssText='font:600 10px/1.4 monospace;letter-spacing:.12em;margin:10px 0 4px;color:#777';st.textContent='CLOUD STATUS UNKNOWN';list.parentNode.insertBefore(st,list);
+      const retry=document.createElement('button');retry.type='button';retry.textContent='↻ REFRESH FROM CLOUD';retry.style.cssText='background:none;border:0;color:#DCCE73;font:600 10px monospace;letter-spacing:.1em;padding:4px 0 12px;cursor:pointer';retry.addEventListener('click',async e=>{e.preventDefault();e.stopPropagation();await retryBigRocks51();});list.parentNode.insertBefore(retry,list);
+    }
     renderStat();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
@@ -1734,6 +1752,113 @@ try{renderSettings()}catch(e){}
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind48);
   else bind48();
   window.goToWeek48=goToWeek48;
+})();
+</script>
+
+
+<script>
+// v5.2 unified cloud transport. Uses direct Supabase REST so sync does not
+// depend on the Supabase CDN being available inside a local file:// browser.
+(function(){
+  const BRK52='ar_big_rocks_v1';
+  function creds52(){
+    const urlEl=document.getElementById('sb-url'), keyEl=document.getElementById('sb-key');
+    let url=((urlEl&&urlEl.value)||localStorage.getItem('_sbUrl')||'').trim().replace(/\/+$/,'');
+    let key=((keyEl&&keyEl.value)||localStorage.getItem('_sbKey')||'').trim();
+    if(url&&key){localStorage.setItem('_sbUrl',url);localStorage.setItem('_sbKey',key);}
+    return {url,key};
+  }
+  function valid52(c){return /^https:\/\/[^/]+\.supabase\.co$/i.test(c.url)&&c.key.length>40;}
+  async function rest52(path,opts={}){
+    const c=creds52(); if(!valid52(c)) throw new Error('Missing or invalid saved connection');
+    const headers=Object.assign({'apikey':c.key,'Authorization':'Bearer '+c.key,'Content-Type':'application/json'},opts.headers||{});
+    const r=await fetch(c.url+'/rest/v1/'+path,Object.assign({},opts,{headers}));
+    const txt=await r.text(); let body=null; try{body=txt?JSON.parse(txt):null}catch(e){body=txt}
+    if(!r.ok) throw new Error((body&&body.message)||('Cloud request failed ('+r.status+')'));
+    return body;
+  }
+  async function load52(key){
+    const q='ar_data?select=value,updated_at&uid=eq.'+encodeURIComponent(SHARED_UID45)+'&key=eq.'+encodeURIComponent(key)+'&order=updated_at.desc&limit=1';
+    const rows=await rest52(q); if(!rows||!rows.length)return null;
+    let v=rows[0].value; if(typeof v==='string'){try{v=JSON.parse(v)}catch(e){}}
+    return v;
+  }
+  async function save52(key,value){
+    const q='ar_data?on_conflict=uid,key';
+    await rest52(q,{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({uid:SHARED_UID45,key:key,value:JSON.stringify(value),updated_at:new Date().toISOString()})});
+    return true;
+  }
+  async function verify52(){await rest52('ar_data?select=uid&limit=1');return true;}
+
+  // Make every existing cloud helper use the same transport.
+  window.cloudLoadForUid45=async function(key,uid){
+    if(uid&&uid!==SHARED_UID45){
+      const q='ar_data?select=value,updated_at&uid=eq.'+encodeURIComponent(uid)+'&key=eq.'+encodeURIComponent(key)+'&order=updated_at.desc&limit=1';
+      const rows=await rest52(q);if(!rows||!rows.length)return null;let v=rows[0].value;if(typeof v==='string'){try{v=JSON.parse(v)}catch(e){}}return v;
+    }
+    return load52(key);
+  };
+  window.cloudSaveForUid45=async function(key,value,uid){
+    if(uid&&uid!==SHARED_UID45){
+      await rest52('ar_data?on_conflict=uid,key',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({uid:uid,key:key,value:JSON.stringify(value),updated_at:new Date().toISOString()})});return true;
+    }
+    return save52(key,value);
+  };
+  window.verifyCloud46=async function(){try{await verify52();return {ok:true}}catch(e){return {ok:false,msg:e.message||'Cloud verification failed'}}};
+
+  // Push/pull all operational data AND Big Rocks through the same shared UID.
+  window.manualPush47=async function(){
+    const msg=document.getElementById('cloud-status-msg'),btn=document.getElementById('push-cloud-btn47');
+    if(btn){btn.disabled=true;btn.textContent='PUSHING…'}
+    try{
+      await verify52();
+      localStorage.setItem('ar_os_v41',JSON.stringify(os));localStorage.setItem('ar_os_v42',JSON.stringify(os42));localStorage.setItem('ar_plan_v3',JSON.stringify(app));
+      const keys=['ar_plan_v3','ar_notes_v1','ar_base_sched','ar_os_v41','ar_os_v42',BRK52];
+      for(const k of keys){const raw=localStorage.getItem(k);if(raw){let v;try{v=JSON.parse(raw)}catch(e){continue}await save52(k,v)}}
+      const check=await load52(BRK52);
+      if(msg){msg.style.color='#4CAF82';msg.textContent='✓ Push verified. This device is now saved to cloud'+(check?' including Big Rocks.':'.');}
+      if(btn){btn.textContent='PUSHED ✓';setTimeout(()=>btn.textContent='PUSH THIS DEVICE',1800)}
+    }catch(e){if(msg){msg.style.color='#E47C6C';msg.textContent='Push failed: '+(e.message||e)}if(btn)btn.textContent='TRY PUSH AGAIN'}
+    finally{if(btn)btn.disabled=false}
+  };
+  window.manualPull47=async function(){
+    if(syncBusy46)return;syncBusy46=true;syncBtn46('PULLING…',true);const msg=document.getElementById('cloud-status-msg');
+    try{
+      await verify52();
+      const keys=['ar_plan_v3','ar_notes_v1','ar_base_sched','ar_os_v41','ar_os_v42',BRK52];
+      const vals={};for(const k of keys)vals[k]=await load52(k);
+      if(vals.ar_plan_v3){localStorage.setItem('ar_plan_v3',JSON.stringify(vals.ar_plan_v3));app=vals.ar_plan_v3}
+      if(vals.ar_notes_v1)localStorage.setItem('ar_notes_v1',JSON.stringify(vals.ar_notes_v1));
+      if(vals.ar_base_sched)localStorage.setItem('ar_base_sched',JSON.stringify(vals.ar_base_sched));
+      if(vals.ar_os_v41){localStorage.setItem('ar_os_v41',JSON.stringify(vals.ar_os_v41));os=Object.assign({},DEFAULT_OS,vals.ar_os_v41)}
+      if(vals.ar_os_v42){localStorage.setItem('ar_os_v42',JSON.stringify(vals.ar_os_v42));os42=Object.assign({weeks:{},commitments:[],locks:{},reviewNotes:{},drifts:[],revenueLog:[],dayClosures:{}},vals.ar_os_v42)}
+      if(vals[BRK52])localStorage.setItem(BRK52,JSON.stringify(vals[BRK52]));
+      try{renderOS();renderOS42();renderToday();renderSettings()}catch(e){}
+      if(msg){msg.style.color='#4CAF82';msg.textContent='✓ Pull verified'+(vals[BRK52]?' including Big Rocks.':'. No Big Rocks record found.');}
+      syncBtn46('PULLED ✓',false);setTimeout(()=>syncBtn46('PULL FROM CLOUD',false),1800);
+    }catch(e){if(msg){msg.style.color='#E47C6C';msg.textContent='Pull failed: '+(e.message||e)}syncBtn46('TRY PULL AGAIN',false)}
+    finally{syncBusy46=false}
+  };
+
+  // Expose direct transport for the v5.1 Big Rocks modal.
+  window.ARCloud52={load:load52,save:save52,verify:verify52,creds:creds52};
+
+  // Override Big Rocks opener so every open rehydrates from cloud first.
+  const oldOpen=window.openBigRocks49;
+  window.openBigRocks49=async function(e){
+    if(e){e.preventDefault();e.stopPropagation();}
+    const m=document.getElementById('bigrocks-modal49');if(m)m.classList.add('open');
+    const st=document.getElementById('bigrocks-sync51');if(st){st.textContent='SYNCING FROM CLOUD…';st.style.color='#DCCE73'}
+    try{
+      const cloud=await load52(BRK52);
+      if(cloud&&cloud.weeks){localStorage.setItem(BRK52,JSON.stringify(cloud));if(st){st.textContent='CLOUD SYNCED ✓';st.style.color='#62D9B5'};location.reload();return;}
+      if(st){st.textContent='NO BIG ROCKS IN CLOUD';st.style.color='#F08070'}
+    }catch(err){if(st){st.textContent='CLOUD READ FAILED · '+err.message;st.style.color='#F08070'}}
+    if(oldOpen) return oldOpen(e);
+  };
+
+  // Rebind the card after overriding the opener.
+  setTimeout(()=>{const card=document.getElementById('outcomes-card43');if(card){card.onclick=null;card.addEventListener('click',window.openBigRocks49)}},0);
 })();
 </script>
 
