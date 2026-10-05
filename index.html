@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>AR — Command Center v5.4</title>
+<title>AR — Command Center v5.5</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
@@ -1851,7 +1851,7 @@ try{renderSettings()}catch(e){}
     const st=document.getElementById('bigrocks-sync51');if(st){st.textContent='SYNCING FROM CLOUD…';st.style.color='#DCCE73'}
     try{
       const cloud=await load52(BRK52);
-      if(cloud&&cloud.weeks){localStorage.setItem(BRK52,JSON.stringify(cloud));if(st){st.textContent='CLOUD SYNCED ✓';st.style.color='#62D9B5'};location.reload();return;}
+      if(cloud&&cloud.weeks){localStorage.setItem(BRK52,JSON.stringify(cloud));if(st){st.textContent='CLOUD SYNCED ✓';st.style.color='#62D9B5'};if(oldOpen)return oldOpen(e);return;}
       if(st){st.textContent='NO BIG ROCKS IN CLOUD';st.style.color='#F08070'}
     }catch(err){if(st){st.textContent='CLOUD READ FAILED · '+err.message;st.style.color='#F08070'}}
     if(oldOpen) return oldOpen(e);
