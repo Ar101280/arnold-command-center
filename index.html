@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>AR — Command Center v5.1</title>
+<title>AR — Command Center v5.4</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
@@ -1757,12 +1757,12 @@ try{renderSettings()}catch(e){}
 
 
 <script>
-// v5.2 unified cloud transport. Uses direct Supabase REST so sync does not
+// v5.4 unified cloud transport. Uses direct Supabase REST so sync does not
 // depend on the Supabase CDN being available inside a local file:// browser.
 (function(){
   const BRK52='ar_big_rocks_v1';
   function creds52(){
-    const urlEl=document.getElementById('sb-url'), keyEl=document.getElementById('sb-key');
+    const urlEl=document.getElementById('sb-url-input'), keyEl=document.getElementById('sb-key-input');
     let url=((urlEl&&urlEl.value)||localStorage.getItem('_sbUrl')||'').trim().replace(/\/+$/,'');
     let key=((keyEl&&keyEl.value)||localStorage.getItem('_sbKey')||'').trim();
     if(url&&key){localStorage.setItem('_sbUrl',url);localStorage.setItem('_sbKey',key);}
